@@ -1,5 +1,5 @@
 # Python version required to run the project.
-python: "3.8.15"
+python: "3.9"
 # Dependencies required to build packages. This field is optional.
 build_dependencies:
   - pip
@@ -10,4 +10,4 @@ build_dependencies:
 # Dependencies required to run the project.
 dependencies:
   - mlflow
-  - scikit-learn==1.0.2
+  - scikit-learn
