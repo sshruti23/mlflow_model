@@ -1,0 +1,7 @@
+name: My Project
+
+python_env: python_env.yaml
+
+entry_points:
+  main:
+    command: "python StockPrediction.py"
