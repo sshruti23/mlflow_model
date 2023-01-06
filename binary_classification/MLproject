@@ -4,4 +4,4 @@ python_env: python_env.yaml
 
 entry_points:
   main:
-    command: "python StockPrediction.py"
+    command: "python stock_prediction_train.py"
