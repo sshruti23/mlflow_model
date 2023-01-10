@@ -8,10 +8,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Export MLFlow Tracking URI
-        # export MLFLOW_TRACKING_URI=databricks
-        run: |
-             export MLFLOW_TRACKING_URI=databricks
+#      - name: Export MLFlow Tracking URI
+#        # export MLFLOW_TRACKING_URI=databricks
+#        run: |
+#             export MLFLOW_TRACKING_URI=databricks
       - name : Install Dependencies
         run : |
               python --version 
@@ -26,6 +26,7 @@ jobs:
              ls -la
       - name: Run MLFlow Project in Databricks
         run: |
+             export MLFLOW_TRACKING_URI=databricks
              mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
              data.json --experiment-id 1663633462792152
       
