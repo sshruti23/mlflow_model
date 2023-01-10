@@ -2,7 +2,7 @@ name: Deploy latest repo code as mlproject on databricks
 on: [push]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,3 +19,4 @@ jobs:
         run: echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file
              databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file
              rm -f token-file
+             databricks fs ls
