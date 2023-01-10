@@ -1,0 +1,23 @@
+name: Databricks-CI-
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    # Checkout code
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Show the environment variables for debugging
+    - name: Display Environment Variable
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          dir env:
+        azPSVersion: '3.1.0'
+    # Login to Azure
+    - name: Login via Az module
+      uses: azure/login@v1.1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
