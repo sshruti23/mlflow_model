@@ -1,5 +1,4 @@
-name: Run a notebook in the current repo on pushes to main
-
+name: Run a notebook from the current repo
 on: [push]
 
 jobs:
@@ -9,7 +8,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Trigger notebook in staging
+      - name: Trigger Binary Classification Model In Databricks
+        # Notebook Task
         uses: databricks/run-notebook@v0
         with:
           databricks-host: ${{ secrets.AZURE_DATABRICKS_HOST }}
