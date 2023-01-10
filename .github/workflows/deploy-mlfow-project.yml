@@ -1,0 +1,13 @@
+name: Deploy latest repo code as mlproject on databricks
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Export MLFlow Tracking URI
+        # export MLFLOW_TRACKING_URI=databricks
+        run: export MLFLOW_TRACKING_URI=databricks
