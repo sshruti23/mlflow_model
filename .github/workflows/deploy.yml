@@ -1,5 +1,5 @@
 name: Databricks-CI-
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }} is trying to connect to Azure and run mlflow
 on: [push]
 jobs:
   Test:
