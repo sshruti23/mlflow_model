@@ -12,11 +12,13 @@ jobs:
         # export MLFLOW_TRACKING_URI=databricks
         run: export MLFLOW_TRACKING_URI=databricks
       - name : Install Dependencies
-        run : python --version
-              pip install databricks-cli
+        run : |
+              python --version \
+              pip install databricks-cli \
               pip install mlflow
       - name: Authenticate To Databricks Workspace
-        run: echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file
-             databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file
-             rm -f token-file
-             databricks fs ls
+        run: | 
+             echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file \
+             databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file \
+             rm -f token-file \
+             databricks fs ls 
