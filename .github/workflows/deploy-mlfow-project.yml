@@ -10,7 +10,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Export MLFlow Tracking URI
         # export MLFLOW_TRACKING_URI=databricks
-        run: export MLFLOW_TRACKING_URI=databricks
+        run: |
+             export MLFLOW_TRACKING_URI=databricks
       - name : Install Dependencies
         run : |
               python --version 
