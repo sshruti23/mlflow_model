@@ -1,0 +1,25 @@
+name: Run a notebook from the current repo
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Trigger Binary Classification Model In Databricks
+        # Notebook Task
+        uses: databricks/run-notebook@v0
+        with:
+          databricks-host: ${{ secrets.AZURE_DATABRICKS_HOST }}
+          databricks-token: ${{ secrets.AZURE_DATABRICKS_TOKEN }}
+          local-notebook-path: binary_classification/stock_prediction_train.py
+          new-cluster-json: >
+            {
+              "num_workers": 1,
+              "spark_version": "12.0.x-cpu-ml-scala2.12",
+              "node_type_id": "Standard_DS3_v2"
+            }

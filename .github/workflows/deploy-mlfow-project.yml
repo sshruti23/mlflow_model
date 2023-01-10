@@ -1,0 +1,34 @@
+name: Deploy latest repo code as mlproject on databricks
+on: [push]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+#      - name: Export MLFlow Tracking URI
+#        # export MLFLOW_TRACKING_URI=databricks
+#        run: |
+#             export MLFLOW_TRACKING_URI=databricks
+      - name : Install Dependencies
+        run : |
+              python --version 
+              pip install databricks-cli 
+              pip install mlflow
+      - name: Authenticate To Databricks Workspace
+        run: | 
+             echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file 
+             databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file 
+             rm -f token-file
+             databricks fs ls
+             ls -la
+      - name: Run MLFlow Project in Databricks
+        run: |
+             export MLFLOW_TRACKING_URI=databricks
+             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
+             data.json --experiment-id 1663633462792152
+      
+          
+      
