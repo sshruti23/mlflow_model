@@ -1,24 +1,23 @@
-name: Databricks-CI-
-run-name: ${{ github.actor }} is trying to connect to Azure and run mlflow
-on: [push]
-jobs:
-  Test:
-    runs-on: ubuntu-latest
-    # Checkout code
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+ame: Run a notebook in the current repo on pushes to main
 
-    # Show the environment variables for debugging
-    - name: Display Environment Variable
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          dir env:
-        azPSVersion: '3.1.0'
-    # Login to Azure
-    - name: Login via Az module
-      uses: azure/login@v1.1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Trigger notebook in staging
+        uses: databricks/run-notebook@v0
+        with:
+          databricks-host: ${{ secrets.AZURE_DATABRICKS_HOST }}
+          databricks-token: ${{ secrets.AZURE_DATABRICKS_TOKEN }}
+          local-notebook-path: binary_classification/stock_prediction_train.py
+          new-cluster-json: >
+            {
+              "num_workers": 1,
+              "spark_version": "11.3.x-scala2.12",
+              "node_type_id": "i3.xlarge"
+            }
