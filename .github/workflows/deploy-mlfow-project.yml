@@ -21,4 +21,12 @@ jobs:
              echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file 
              databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file 
              rm -f token-file
-             databricks fs ls 
+             databricks fs ls
+             ls -la
+      - name: Run MLFlow Project in Databricks
+        run: |
+             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
+             data.json --experiment-id 1663633462792152
+      
+          
+      
