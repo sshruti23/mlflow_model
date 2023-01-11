@@ -3,5 +3,7 @@ name: Stock Prediction Model
 python_env: python_env.yaml
 
 entry_points:
-  main:
+  train:
+    command: "python stock_prediction_train.py"
+  inference:
     command: "python stock_prediction_train.py"
