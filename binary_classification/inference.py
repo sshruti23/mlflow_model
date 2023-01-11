@@ -15,7 +15,8 @@ import mlflow.sklearn
 from pyspark.sql import SparkSession
 
 
-EXPERIMENT_ID = 1663633462792152
+
+EXPERIMENT_ID = "1663633462792152"
 
 
 def rolling_window(a, window):
@@ -51,11 +52,20 @@ def prepare_training_data(data):
 
 
 def pull_data():
-    spark = SparkSession.builder.appName("testing").enableHiveSupport().getOrCreate()
+    spark = SparkSession.builder.appName("read_csv_using_spark").enableHiveSupport().getOrCreate()
+    import os
+    from os import listdir
+    from os.path import isfile, join
+    print("--------")
+    cwd = os.getcwd()
+    onlyfiles = [os.path.join(cwd, f) for f in os.listdir(cwd) if
+                 os.path.isfile(os.path.join(cwd, f))]
+    print(onlyfiles)
+    print("--------")
     input_df = (
         spark.read.option("header", True)
         .option("inferschema", True)
-        .csv(f"/Users/thoughtworks/Documents/Shruti_Github/mlflow_model/binary_classification/data/inference.csv")
+        .csv(f"./data/inference.csv")
     )
     btc_mat = input_df.toPandas().to_numpy()
 
@@ -88,7 +98,7 @@ def inference(model_name, model_version):
 
 def find_best_run(metric: str = "training_f1_score"):
     client = mlflow.MlflowClient()
-    experiment_runs = client.search_runs(experiment_ids="0")
+    experiment_runs = client.search_runs(experiment_ids=EXPERIMENT_ID)
     best_run_id = None
     best_artifact_uri = None
     best_metric_score = None
@@ -122,9 +132,9 @@ def register_model(model_name, rf_uri):
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
 
-    n_estimators = [50, 100, 200]
-    criterion = ["gini", "entropy"]
-    min_weight_fraction_leaf = [0.0, 0.1]
+    n_estimators = [50]
+    criterion = ["gini"]
+    min_weight_fraction_leaf = [0.0]
 
     for n_est in n_estimators:
         for crit in criterion:
@@ -197,7 +207,7 @@ if __name__ == "__main__":
         best_run_id_met_acc,
         best_artifact_uri_met_acc,
         best_metric_score_met_acc,
-    ) = find_best_run(metric="acc")
+    ) = find_best_run(metric="training_roc_auc")
     model_version = register_model(
         model_name=model_name, rf_uri=best_artifact_uri_met_acc
     )
@@ -208,5 +218,11 @@ if __name__ == "__main__":
     loaded_model = mlflow.pyfunc.load_model(
         f"models:/{model_name}/{model_version.version}"
     )
+    print("Predict X_test")
+    print(X_test)
+    print("Predict Y_test")
+    print(y_test)
     loaded_model.predict(X_test)
     print(predictions, "\n")
+
+
