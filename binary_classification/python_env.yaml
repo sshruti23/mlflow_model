@@ -9,6 +9,7 @@ build_dependencies:
   - pandas_datareader
   - yfinance
   - sklearn
+  - pyspark
 # Dependencies required to run the project.
 dependencies:
   - mlflow
