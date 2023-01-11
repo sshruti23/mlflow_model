@@ -1,8 +1,10 @@
 name: Run a notebook from the current repo
+
 on:
   push:
     branches:
-      - main
+      - never_run
+
 jobs:
   build:
     runs-on: ubuntu-latest
