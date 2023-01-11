@@ -1,5 +1,6 @@
 name: Deploy latest repo code as mlproject on databricks
-on: [push]
+on:
+   if: github.actor == 'sshruti23'
 
 jobs:
   staging:
@@ -18,8 +19,6 @@ jobs:
              echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file 
              databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file 
              rm -f token-file
-             databricks fs ls
-             ls -la
       - name: Run MLFlow Project in Databricks
         run: |
              export MLFLOW_TRACKING_URI=databricks
@@ -43,8 +42,6 @@ jobs:
              echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file 
              databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file 
              rm -f token-file
-             databricks fs ls
-             ls -la
       - name: Run MLFlow Project in Databricks
         run: |
              export MLFLOW_TRACKING_URI=databricks
