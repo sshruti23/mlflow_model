@@ -2,3 +2,5 @@
 mlruns/
 local/
 AutogluonModels/
+*.ipynb_checkpoints
+.DS_Store
