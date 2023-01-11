@@ -1,2 +1,4 @@
 .idea/
 mlruns/
+local/
+AutogluonModels/

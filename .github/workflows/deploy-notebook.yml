@@ -16,7 +16,7 @@ jobs:
         with:
           databricks-host: ${{ secrets.AZURE_DATABRICKS_HOST }}
           databricks-token: ${{ secrets.AZURE_DATABRICKS_TOKEN }}
-          local-notebook-path: binary_classification/stock_prediction_train.py
+          local-notebook-path: binary_classification/train.py
           new-cluster-json: >
             {
               "num_workers": 1,
