@@ -1,5 +1,5 @@
 import warnings
-
+from autogluon.tabular import TabularDataset, TabularPredictor
 import numpy as np
 import datetime
 from pandas_datareader import data as pdr
@@ -10,24 +10,71 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
-
+import pandas as pd
+from platform import python_version
 import mlflow.sklearn
 
 
-def acquire_training_data():
-    yf.pdr_override()
-    y_symbols = ["BTC-USD"]
+class AutogluonModel(mlflow.pyfunc.PythonModel):
+    """
+        Creates a TabularPredictor Autogluon Model
+        input : python model
+    """
+    def load_context(self, context):
+        self.predictor = TabularPredictor.load(context.artifacts.get("predictor_path"))
 
-    startdate = datetime.datetime(2022, 1, 1)
-    enddate = datetime.datetime(2022, 12, 31)
-    df = pdr.get_data_yahoo(y_symbols, start=startdate, end=enddate)
-    return df
+    def predict(self, context, model_input):
+        return self.predictor.predict(model_input)
 
 
-def digitize(n):
-    if n > 0:
-        return 1
-    return 0
+def log_model():
+    model = AutogluonModel()
+    predictor_path = predictor.path + "models/" + predictor.get_model_best()
+    artifacts = {"predictor_path": predictor_path}
+    conda_env = {
+        "channels": ["conda-forge"],
+        "dependencies": [f"python={python_version()}", "pip"],
+        "pip": [f"mlflow=={mlflow.__version__}", f'cloudpickle=="2.2.0"'],
+        "name": "mlflow-env",
+    }
+    mlflow.pyfunc.log_model(
+        artifact_path="model",
+        python_model=model,
+        artifacts=artifacts,
+        conda_env=conda_env,
+    )
+
+
+def log_experiments(predictor):
+    for i, model_name in enumerate(list(predictor.leaderboard(silent=True)["model"])):
+        with mlflow.start_run(run_name=model_name):
+            if i == 0:
+                log_model()
+            info = predictor.info()["model_info"][model_name]
+            score = info["val_score"]
+            model_type = info["model_type"]
+            hyper_params = info["hyperparameters"]
+            hyper_params["model_type"] = model_type
+            mlflow.log_params(hyper_params)
+            mlflow.log_metric("acc", score)
+
+
+def create_autogluon_experiment(train_df):
+    predictor = TabularPredictor(label="to_predict", eval_metric="accuracy").fit(
+        train_data=train_df, verbosity=2, presets="medium_quality"
+    )
+    return predictor
+
+
+def prepare_data(X, Y):
+    X = pd.DataFrame(X)
+    X.columns = ["day_" + str(i) for i in range(14)]
+    Y = pd.DataFrame(Y)
+    Y.columns = ["to_predict"]
+    df = pd.concat([X, Y], axis=1)
+
+    train_data, test_data = train_test_split(df, test_size=0.25, random_state=4284)
+    return train_data, test_data
 
 
 def rolling_window(a, window):
@@ -45,8 +92,13 @@ def rolling_window(a, window):
     return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
 
 
-def prepare_training_data(data):
+def digitize(n):
+    if n > 0:
+        return 1
+    return 0
 
+
+def prepare_training_data(data):
     """
     Return a prepared numpy dataframe
     input : Dataframe with expected schema
@@ -57,57 +109,30 @@ def prepare_training_data(data):
     return data
 
 
+def acquire_training_data():
+    yf.pdr_override()
+    y_symbols = ["BTC-USD"]
+
+    startdate = datetime.datetime(2022, 1, 1)
+    enddate = datetime.datetime(2022, 12, 31)
+    df = pdr.get_data_yahoo(y_symbols, start=startdate, end=enddate)
+    return df
+
+
 if __name__ == "__main__":
-    warnings.filterwarnings("ignore")
+    # data preparation
+    training_data = acquire_training_data()
+    prepared_training_data_df = prepare_training_data(training_data)
+    btc_mat = prepared_training_data_df.to_numpy()
+    WINDOW_SIZE = 14
+    X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
+    Y = prepared_training_data_df["to_predict"].to_numpy()[WINDOW_SIZE:]
+    train_data, test_data = prepare_data(X, Y)
 
-    with mlflow.start_run():
-        training_data = acquire_training_data()
+    # AutoML model selection
+    predictor = create_autogluon_experiment(train_data)
 
-        prepared_training_data_df = prepare_training_data(training_data)
+    # Logging of AutoML experiments
+    log_experiments(predictor)
 
-        btc_mat = prepared_training_data_df.to_numpy()
-
-        WINDOW_SIZE = 14
-
-        X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
-        Y = prepared_training_data_df["to_predict"].to_numpy()[WINDOW_SIZE:]
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, Y, test_size=0.25, random_state=4284, stratify=Y
-        )
-
-        # clf is my Model
-        clf = RandomForestClassifier(
-            bootstrap=True,
-            criterion="gini",
-            min_samples_split=2,
-            min_weight_fraction_leaf=0.0,
-            n_estimators=50,
-            random_state=4284,
-            verbose=0,
-        )
-
-        # training
-        clf.fit(X_train, y_train)
-
-        print(" --- Model Predict ---- ")
-        # inference
-        predicted = clf.predict(X_test)
-        mlflow.sklearn.log_model(clf, "model_random_forest")
-
-        print(classification_report(y_test, predicted))
-
-        mlflow.log_metric(
-            "precision_label_0", precision_score(y_test, predicted, pos_label=0)
-        )
-        mlflow.log_metric(
-            "recall_label_0", recall_score(y_test, predicted, pos_label=0)
-        )
-        mlflow.log_metric("f1score_label_0", f1_score(y_test, predicted, pos_label=0))
-        mlflow.log_metric(
-            "precision_label_1", precision_score(y_test, predicted, pos_label=1)
-        )
-        mlflow.log_metric(
-            "recall_label_1", recall_score(y_test, predicted, pos_label=1)
-        )
-        mlflow.log_metric("f1score_label_1", f1_score(y_test, predicted, pos_label=1))
+    predictor.leaderboard()
