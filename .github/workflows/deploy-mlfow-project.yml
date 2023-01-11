@@ -23,10 +23,12 @@ jobs:
       - name: Run MLFlow Project in Databricks
         run: |
              export MLFLOW_TRACKING_URI=databricks
-             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
-             data.json --experiment-id 1663633462792152
+#             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
+#             data.json --experiment-id 1663633462792152
   prod:
     runs-on: ubuntu-latest
+    needs: staging
+    environment: 'prod'
 
     steps:
       - name: Checkout repo
@@ -46,7 +48,7 @@ jobs:
       - name: Run MLFlow Project in Databricks
         run: |
              export MLFLOW_TRACKING_URI=databricks
-             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
-             data.json --experiment-id 1663633462792152      
+#             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
+#             data.json --experiment-id 1663633462792152
           
       
