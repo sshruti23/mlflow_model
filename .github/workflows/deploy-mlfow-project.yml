@@ -1,9 +1,9 @@
 name: Deploy latest repo code as mlproject on databricks
-on:
-   if: github.actor == 'sshruti23'
+on: [push]
 
 jobs:
   staging:
+    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +25,7 @@ jobs:
 #             mlflow run  https://github.com/sshruti23/mlflow_model.git#binary_classification -b databricks --backend-config \
 #             data.json --experiment-id 1663633462792152
   prod:
+    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
     needs: staging
     environment: 'prod'
