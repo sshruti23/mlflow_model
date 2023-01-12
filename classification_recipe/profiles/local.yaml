@@ -1,0 +1,24 @@
+experiment:
+  name: "stock_prediction_model"
+  tracking_uri: "localhost:9000"
+  artifact_location: "./artifacts"
+
+model_registry:
+  registry_uri: "./"
+  model_name: "model_random_forest"
+
+SPLIT_RATIOS: [ 0.80, 0.10, 0.10 ]
+
+INGEST_CONFIG:
+  using: csv
+  location: [ "./data/data.csv" ]
+  loader_method: load_file_as_dataframe
+
+INGEST_SCORING_CONFIG:
+  using: csv
+  location: "./data/data.csv"
+#  loader_method: load_file_as_dataframe
+
+PREDICT_OUTPUT_CONFIG:
+  using: csv
+  location: "./data/data.csv"
