@@ -51,23 +51,13 @@ def prepare_training_data(data):
 
 
 def pull_data():
-    spark = (
-        SparkSession.builder.appName("read_csv_using_spark")
-        .enableHiveSupport()
-        .getOrCreate()
-    )
-
-    input_df = (
-        spark.read.option("header", True)
-        .option("inferschema", True)
-        .csv(f"./data/inference.csv")
-    )
-    btc_mat = input_df.toPandas().to_numpy()
+    input_df = pd.read_csv('/dbfs/data/inference.csv')
+    btc_mat = input_df.to_numpy()
 
     WINDOW_SIZE = 14
 
     X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
-    Y = input_df.toPandas()["to_predict"].to_numpy()[WINDOW_SIZE:]
+    Y = input_df["to_predict"].to_numpy()[WINDOW_SIZE:]
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, Y, test_size=0.25, random_state=4284, stratify=Y

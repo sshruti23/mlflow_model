@@ -8,7 +8,7 @@ build_dependencies:
   - autogluon
   - pandas_datareader
   - yfinance
-  - sklearn
+  - scikit-learn
   - pyspark
 # Dependencies required to run the project.
 dependencies:
