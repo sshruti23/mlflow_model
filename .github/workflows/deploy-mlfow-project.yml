@@ -16,8 +16,8 @@ jobs:
               pip install mlflow
       - name: Authenticate To Databricks Workspace
         run: | 
-             echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file 
-             databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file 
+             echo ${{ secrets.AWS_DB_TOKEN }} > token-file 
+             databricks configure --host ${{ secrets.AWS_DB_HOST }} --token-file token-file 
              rm -f token-file
       - name: Run MLFlow Project in Databricks
         run: |
@@ -26,7 +26,7 @@ jobs:
               -b databricks \
               --backend-config data.json  \
               --entry-point train.py \
-              --experiment-id 1663633462792152
+              --experiment-id 3974792302628189
   prod:
     if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
@@ -53,6 +53,4 @@ jobs:
               -b databricks \
               --backend-config data.json  \
               --entry-point inference.py \
-              --experiment-id 1663633462792152
-          
-      
+              --experiment-id 3974792302628189
