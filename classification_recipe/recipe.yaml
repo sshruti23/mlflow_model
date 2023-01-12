@@ -1,0 +1,24 @@
+recipe: "classification/v1"
+target_col: "to_predict"
+positive_class: 1
+primary_metric: "f1_score"
+steps:
+  ingest: {{INGEST_CONFIG}}
+  split:
+    split_ratios: {{SPLIT_RATIOS|default([0.75, 0.125, 0.125])}}
+  transform:
+    using: custom
+    transformer_method: transformer_fn
+  train:
+    using: custom
+    estimator_method: estimator_fn
+  evaluate:
+    validation_criteria:
+      - metric: f1_score
+        threshold: 0.0
+      - metric: precision_score
+        threshold: 0.0
+      - metric: recall_score
+        threshold: 0.0
+  register:
+    allow_non_validated_model: true
