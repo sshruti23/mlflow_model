@@ -43,8 +43,8 @@ jobs:
               pip install mlflow
       - name: Authenticate To Databricks Workspace
         run: | 
-             echo ${{ secrets.AZURE_DATABRICKS_TOKEN }} > token-file 
-             databricks configure --host ${{ secrets.AZURE_DATABRICKS_HOST }} --token-file token-file 
+             echo ${{ secrets.AWS_DB_TOKEN }} > token-file 
+             databricks configure --host ${{ secrets.AWS_DB_HOST }} --token-file token-file 
              rm -f token-file
       - name: Run MLFlow Project in Databricks
         run: |
