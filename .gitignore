@@ -4,3 +4,6 @@ local/
 AutogluonModels/
 *.ipynb_checkpoints
 .DS_Store
+classification_recipe/artifacts
+regression/artifacts
+regression/registry/models
