@@ -7,3 +7,6 @@ AutogluonModels/
 classification_recipe/artifacts
 regression/artifacts
 regression/registry/models
+dist/
+*.egg-info/
+build/
