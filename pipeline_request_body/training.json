@@ -1,0 +1,163 @@
+{
+  "run_name": "Stock_Prediction_Binary_Classification_Training_Pipeline",
+  "tasks": [
+    {
+      "task_key": "Data_Preprocessing",
+      "depends_on": [],
+      "new_cluster": {
+        "spark_version": "12.0.x-cpu-ml-scala2.12",
+        "node_type_id": "i3.xlarge",
+        "autoscale": {
+          "min_workers": "0",
+          "max_workers": "1"
+        }
+      },
+      "libraries": [
+        {
+          "egg": "dbfs:/FileStore/Training_Pipeline_Library_0_1_py3_9.egg"
+        },
+        {
+          "pypi": {
+            "package": "mlflow"
+          }
+        },
+        {
+          "pypi": {
+            "package": "autogluon"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pandas_datareader"
+          }
+        },
+        {
+          "pypi": {
+            "package": "yfinance"
+          }
+        },
+        {
+          "pypi": {
+            "package": "scikit-learn"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pyspark"
+          }
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "dbfs:/FileStore/preprocess_data.py"
+      }
+    },
+    {
+      "task_key": "Training",
+      "depends_on": [
+        {
+          "task_key": "Data_Preprocessing"
+        }
+      ],
+      "new_cluster": {
+        "spark_version": "12.0.x-cpu-ml-scala2.12",
+        "node_type_id": "i3.xlarge",
+        "autoscale": {
+          "min_workers": "0",
+          "max_workers": "1"
+        }
+      },
+      "libraries": [
+        {
+          "egg": "dbfs:/FileStore/Training_Pipeline_Library_0_1_py3_9.egg"
+        },
+        {
+          "pypi": {
+            "package": "mlflow"
+          }
+        },
+        {
+          "pypi": {
+            "package": "autogluon"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pandas_datareader"
+          }
+        },
+        {
+          "pypi": {
+            "package": "yfinance"
+          }
+        },
+        {
+          "pypi": {
+            "package": "scikit-learn"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pyspark"
+          }
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "dbfs:/FileStore/train.py"
+      }
+    },
+    {
+      "task_key": "Evaluate",
+      "depends_on": [
+        {
+          "task_key": "Training"
+        }
+      ],
+      "new_cluster": {
+        "spark_version": "12.0.x-cpu-ml-scala2.12",
+        "node_type_id": "i3.xlarge",
+        "autoscale": {
+          "min_workers": "0",
+          "max_workers": "1"
+        }
+      },
+      "libraries": [
+        {
+          "egg": "dbfs:/FileStore/Training_Pipeline_Library_0_1_py3_9.egg"
+        },
+        {
+          "pypi": {
+            "package": "mlflow"
+          }
+        },
+        {
+          "pypi": {
+            "package": "autogluon"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pandas_datareader"
+          }
+        },
+        {
+          "pypi": {
+            "package": "yfinance"
+          }
+        },
+        {
+          "pypi": {
+            "package": "scikit-learn"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pyspark"
+          }
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "dbfs:/FileStore/evaluate.py"
+      }
+    }
+  ]
+}
