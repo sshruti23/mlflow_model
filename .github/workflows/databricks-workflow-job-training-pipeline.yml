@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   training:
-    if: github.actor == 'sshruti23'
+#    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
 
     steps:
