@@ -10,9 +10,24 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name : Check Files In Current Directory
+      - name : Install Dependencies
         run : |
-              ls -la
+            python --version 
+            pip install databricks-cli
+      - name : Create Model Library Python Egg File
+        run : |
+            ls -la
+            python setup.py bdist --formats=egg
+            mv dist/*.egg dist/model.egg
+            ls -la
+      - name: Authenticate To Databricks Workspace
+        run: |
+            echo ${{ secrets.AWS_DB_TOKEN }} > token-file 
+            databricks configure --host ${{ secrets.AWS_DB_HOST }} --token-file token-file 
+            rm -f token-file
+      - name: Upload egg file to databricks workspace
+        run: |
+            dbfs cp --overwrite dist/*.egg  dbfs:/FileStore/
       - name: Submit A Databricks Job For Training model
         run: |
              curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/submit \
