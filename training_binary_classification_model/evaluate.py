@@ -1,5 +1,6 @@
 from sklearn.metrics import classification_report
 import pandas as pd
+from delta.tables import *
 
 import mlflow.sklearn
 
@@ -38,8 +39,9 @@ def find_best_run(metric: str = "training_f1_score"):
 
 
 if __name__ == "__main__":
-    test_data_path = '/dbfs/data/test_data.csv'
-    test_data = acquire_data(test_data_path)
+    dlt_table_name = "default.test"
+    dlt_table = DeltaTable.forName(spark, dlt_table_name)
+    test_data = dlt_table.toDF().toPandas()
     y_test = test_data['to_predict']
     X_test = test_data.drop('to_predict', axis=1)
 

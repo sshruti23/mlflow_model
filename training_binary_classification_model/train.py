@@ -1,7 +1,7 @@
-
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import mlflow.sklearn
+from delta.tables import *
 
 
 def acquire_training_data(data_path):
@@ -9,7 +9,7 @@ def acquire_training_data(data_path):
     return df
 
 
-def create_and_log_experiment(X_train, y_train, n_estimators):
+def create_and_log_experiment(X_train, y_train, n_estimators, dlt_table_name, dlt_table_version):
     mlflow.set_experiment(experiment_id="196699694392376")
     for n_est in n_estimators:
         with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
@@ -24,14 +24,15 @@ def create_and_log_experiment(X_train, y_train, n_estimators):
                 verbose=0)
 
             clf.fit(X_train, y_train)
+            mlflow.log_param("train_table", dlt_table_name)
+            mlflow.log_param("train_table_version", dlt_table_version)
 
 
 if __name__ == "__main__":
-    train_data_path = '/dbfs/data/train_data.csv'
-    train_data = acquire_training_data(train_data_path)
+    dlt_table_name = "default.train"
+    dlt_table = DeltaTable.forName(spark, dlt_table_name)
+    dlt_table_version = dlt_table.history().head(1)[0].version
+    train_data = dlt_table.toDF().toPandas()
     y_train = train_data['to_predict']
     X_train = train_data.drop('to_predict', axis=1)
-    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000])
-
-
-
+    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)

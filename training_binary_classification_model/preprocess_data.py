@@ -14,8 +14,9 @@ import pandas as pd
 from platform import python_version
 import mlflow.sklearn
 
+
 def acquire_training_data():
-    df=pd.read_csv('/dbfs/data/raw.csv')
+    df = pd.read_csv('/dbfs/data/raw.csv')
 
     return df
 
@@ -52,7 +53,6 @@ def prepare_training_data(data):
     return data
 
 
-
 def prepare_data(X, Y):
     X = pd.DataFrame(X)
     X.columns = ["day_" + str(i) for i in range(14)]
@@ -63,8 +63,8 @@ def prepare_data(X, Y):
     train_data, test_data = train_test_split(df, test_size=0.25, random_state=4284)
     return train_data, test_data
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     training_data = acquire_training_data()
     prepared_training_data_df = prepare_training_data(training_data)
     btc_mat = prepared_training_data_df.to_numpy()
@@ -72,5 +72,6 @@ if __name__ == "__main__":
     X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
     Y = prepared_training_data_df["to_predict"].to_numpy()[WINDOW_SIZE:]
     train_data, test_data = prepare_data(X, Y)
-    train_data.to_csv('/dbfs/data/train_data.csv',index=False)
-    test_data.to_csv('/dbfs/data/test_data.csv',index=False)
+
+    spark.createDataFrame(train_data).write.format("delta").mode("overwrite").saveAsTable("default.train")
+    spark.createDataFrame(test_data).write.format("delta").mode("overwrite").saveAsTable("default.test")
