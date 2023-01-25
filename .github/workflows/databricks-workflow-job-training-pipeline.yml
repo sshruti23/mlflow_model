@@ -14,20 +14,20 @@ jobs:
         run : |
             python --version 
             pip install databricks-cli
-      - name : Create Model Library Python Egg File
-        run : |
-            ls -la
-            python setup.py bdist --formats=egg
-            mv dist/*.egg dist/model.egg
-            ls -la
+#      - name : Create Model Library Python Egg File
+#        run : |
+#            ls -la
+#            python setup.py bdist --formats=egg
+#            mv dist/*.egg dist/model.egg
+#            ls -la
       - name: Authenticate To Databricks Workspace
         run: |
             echo ${{ secrets.AWS_DB_TOKEN }} > token-file 
             databricks configure --host ${{ secrets.AWS_DB_HOST }} --token-file token-file 
             rm -f token-file
-      - name: Upload egg file to databricks workspace
+      - name: Upload model artefacts files to databricks filestore
         run: |
-            dbfs cp --overwrite dist/*.egg  dbfs:/FileStore/
+            dbfs cp --overwrite training_binary_classification_model/*  dbfs:/FileStore/
       - name: Submit A Databricks Job For Training model
         run: |
              curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/submit \
