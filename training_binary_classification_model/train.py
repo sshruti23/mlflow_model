@@ -34,9 +34,6 @@ def start():
     dlt_table = DeltaTable.forName(spark, dlt_table_name)
     dlt_table_version = dlt_table.history().head(1)[0].version
     train_data = dlt_table.toDF().toPandas()
-    y_train = train_data['to_predict'] train_data = dlt_table.toDF().toPandas()    y_train = train_data['to_predict']
+    y_train = train_data['to_predict']
     X_train = train_data.drop('to_predict', axis=1)
-    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000])
-
-
-
+    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)
