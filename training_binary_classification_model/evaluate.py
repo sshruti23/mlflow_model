@@ -38,12 +38,13 @@ def find_best_run(metric: str = "training_f1_score"):
     return best_run_id, best_artifact_uri, best_metric_score
 
 
-if __name__ == "__main__":
+def start():
+    print("Inside evaluate code")
     dlt_table_name = "default.test"
     dlt_table = DeltaTable.forName(spark, dlt_table_name)
     test_data = dlt_table.toDF().toPandas()
-    y_test = test_data['to_predict']
-    X_test = test_data.drop('to_predict', axis=1)
+    y_test = test_data["to_predict"]
+    X_test = test_data.drop("to_predict", axis=1)
 
     best_run_id, best_artifact_uri, best_metric_score = find_best_run()
     best_model = mlflow.sklearn.load_model(f"runs:/{best_run_id}/model")

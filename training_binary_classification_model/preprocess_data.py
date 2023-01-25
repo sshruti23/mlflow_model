@@ -1,22 +1,11 @@
-import warnings
-from autogluon.tabular import TabularDataset, TabularPredictor
 import numpy as np
-import datetime
-from pandas_datareader import data as pdr
-import yfinance as yf
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
 import pandas as pd
-from platform import python_version
-import mlflow.sklearn
+from sklearn.model_selection import train_test_split
+
 
 
 def acquire_training_data():
-    df = pd.read_csv('/dbfs/data/raw.csv')
+    df = pd.read_csv("/dbfs/data/raw.csv")
 
     return df
 
@@ -64,7 +53,8 @@ def prepare_data(X, Y):
     return train_data, test_data
 
 
-if __name__ == "__main__":
+def start():
+    print("Inside pre-process code")
     training_data = acquire_training_data()
     prepared_training_data_df = prepare_training_data(training_data)
     btc_mat = prepared_training_data_df.to_numpy()

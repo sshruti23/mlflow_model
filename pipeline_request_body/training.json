@@ -14,7 +14,7 @@
       },
       "libraries": [
         {
-          "egg": "dbfs:/FileStore/Training_Pipeline_Library_0_1_py3_9.egg"
+          "egg": "dbfs:/FileStore/training_Pipeline_Library_0_1_py3_9.egg"
         },
         {
           "pypi": {
@@ -48,7 +48,11 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "dbfs:/FileStore/preprocess_data.py"
+        "python_file": "dbfs:/FileStore/entry.py",
+        "parameters": [
+          "-m",
+          "preprocess_data"
+        ]
       }
     },
     {
@@ -68,7 +72,7 @@
       },
       "libraries": [
         {
-          "egg": "dbfs:/FileStore/Training_Pipeline_Library_0_1_py3_9.egg"
+          "egg": "dbfs:/FileStore/training_Pipeline_Library_0_1_py3_9.egg"
         },
         {
           "pypi": {
@@ -122,7 +126,7 @@
       },
       "libraries": [
         {
-          "egg": "dbfs:/FileStore/Training_Pipeline_Library_0_1_py3_9.egg"
+          "egg": "dbfs:/FileStore/training_Pipeline_Library_0_1_py3_9.egg"
         },
         {
           "pypi": {
@@ -156,7 +160,11 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "dbfs:/FileStore/evaluate.py"
+        "python_file": "dbfs:/FileStore/entry.py",
+        "parameter": [
+          "-m",
+          ""
+        ]
       }
     }
   ]

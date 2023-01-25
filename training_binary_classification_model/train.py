@@ -28,11 +28,15 @@ def create_and_log_experiment(X_train, y_train, n_estimators, dlt_table_name, dl
             mlflow.log_param("train_table_version", dlt_table_version)
 
 
-if __name__ == "__main__":
+def start():
+    print("Inside training code")
     dlt_table_name = "default.train"
     dlt_table = DeltaTable.forName(spark, dlt_table_name)
     dlt_table_version = dlt_table.history().head(1)[0].version
     train_data = dlt_table.toDF().toPandas()
-    y_train = train_data['to_predict']
+    y_train = train_data['to_predict'] train_data = dlt_table.toDF().toPandas()    y_train = train_data['to_predict']
     X_train = train_data.drop('to_predict', axis=1)
-    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)
+    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000])
+
+
+

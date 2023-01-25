@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-setup(name='Training Pipeline Library',
+setup(name='training Pipeline Library',
       version='0.1',
       description='POC TEAM ML MODEL',
       author='POC_TEAM',
