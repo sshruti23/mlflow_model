@@ -27,7 +27,9 @@ jobs:
             rm -f token-file
       - name: Upload model artefacts files to databricks filestore
         run: |
-            dbfs cp --overwrite training_binary_classification_model/*  dbfs:/FileStore/
+            dbfs cp --overwrite training_binary_classification_model/preprocess_data.py  dbfs:/FileStore/
+            dbfs cp --overwrite training_binary_classification_model/train.py  dbfs:/FileStore/
+            dbfs cp --overwrite training_binary_classification_model/evaluate.py  dbfs:/FileStore/
       - name: Submit A Databricks Job For Training model
         run: |
              curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/submit \
