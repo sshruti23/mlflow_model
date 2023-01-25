@@ -35,4 +35,4 @@ if __name__ == "__main__":
     train_data = dlt_table.toDF().toPandas()
     y_train = train_data['to_predict']
     X_train = train_data.drop('to_predict', axis=1)
-    create_and_log_experiment(X_train, y_train, n_estimators=[50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)
+    create_and_log_experiment(X_train, y_train, [50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)
