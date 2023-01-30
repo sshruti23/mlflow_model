@@ -19,6 +19,7 @@ jobs:
       - name: Update pipeline request body json with cluster id
         run: |
             python github_workflows/scripts/create_request_body.py "${{ env.cluster_id }}"
+      #TODO: Call Repo API and update the main branch code in databricks
       - name: Create And Start A Databricks Job For Training Model
         run: |
             sleep 5m
