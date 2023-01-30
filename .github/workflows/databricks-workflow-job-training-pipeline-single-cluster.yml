@@ -17,13 +17,13 @@ jobs:
       - name : Create a new cluster for databricks job to run
         id: cluster_id
         run : |
-            sh github_workflows/bash/cluster_creation.sh
+            sh github_workflows/bash/cluster_creation.sh ${{ secrets.AWS_DB_HOST }} ${{ secrets.AWS_DB_TOKEN }}
       - name: Update pipeline request body json with cluster id
         run: |
             python github_workflows/create_request_body "${{ env.cluster_id }}"
       - name: Create And Start A Databricks Job For Training Model
         run: |
-            sh github_workflows/bash/training_job.sh
+            sh github_workflows/bash/training_job.sh ${{ secrets.AWS_DB_HOST }} ${{ secrets.AWS_DB_TOKEN }}
   register:
     if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
