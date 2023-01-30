@@ -16,6 +16,4 @@ def get(databricks_cluster_id: str):
 
 if __name__ == '__main__':
     args = sys.argv
-    print(args[0])
-    print(args[1])
-    get(args[0])
+    get(args[1])

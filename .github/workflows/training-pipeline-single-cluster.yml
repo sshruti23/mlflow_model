@@ -18,7 +18,6 @@ jobs:
             echo "cluster_id=$id" >> $GITHUB_ENV
       - name: Update pipeline request body json with cluster id
         run: |
-            echo "${{ env.cluster_id }}"
             python github_workflows/scripts/create_request_body.py "${{ env.cluster_id }}"
             cat github_workflows/data/request.json
       #TODO: 1. Call Repo API and update the main branch code in databricks
