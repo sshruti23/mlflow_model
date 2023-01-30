@@ -4,7 +4,7 @@
     {
       "task_key": "Data_Preprocessing",
       "depends_on": [],
-      "existing_cluster_id": "{{ env.cluster_id }}",
+      "existing_cluster_id": "{{ cluster_id }}",
       "libraries": [
         {
           "pypi": {
@@ -49,7 +49,7 @@
           "task_key": "Data_Preprocessing"
         }
       ],
-      "existing_cluster_id": "{{ env.cluster_id }}",
+      "existing_cluster_id": "{{ cluster_id }}",
       "libraries": [
         {
           "pypi": {
@@ -94,7 +94,7 @@
           "task_key": "Training"
         }
       ],
-      "existing_cluster_id": "{{ env.cluster_id }}",
+      "existing_cluster_id": "{{ cluster_id }}",
       "libraries": [
         {
           "pypi": {
