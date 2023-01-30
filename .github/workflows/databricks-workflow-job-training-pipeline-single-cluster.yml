@@ -22,7 +22,7 @@ jobs:
                         -H "Content-Type: application/json" \
                         --data @pipeline_request_body/cluster_creation_request.json)
           id=$( jq -r  '.cluster_id' <<< "${output}" )
-          echo "$id" >> $GITHUB_ENV
+          echo "cluster_id=$id" >> $GITHUB_ENV
       - name: Echo the cluster value
         run: |
           echo "I'm echo printing cluster id value"
