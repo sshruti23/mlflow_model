@@ -8,6 +8,7 @@ def get(databricks_cluster_id: str):
     file = open("github_workflows/data/training_single_cluster.json")
     data = json.load(file)
     template = Template(str(data))
+
     request_body = template.render(cluster_id=databricks_cluster_id)
     with open("github_workflows/data/request.json", "w+") as outfile:
         outfile.write(request_body.replace("\'", "\""))
@@ -15,4 +16,6 @@ def get(databricks_cluster_id: str):
 
 if __name__ == '__main__':
     args = sys.argv
-    get(args[1])
+    print(args[0])
+    print(args[1])
+    get(args[0])
