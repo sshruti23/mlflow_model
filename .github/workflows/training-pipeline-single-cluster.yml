@@ -23,18 +23,18 @@ jobs:
       #TODO: 1. Call Repo API and update the main branch code in databricks
       #TODO: 2. Check if there is a way to check if the cluster has been created or not
       #TODO: 3. remove sleep if 2 works
-#      - name: Create And Start A Databricks Job For Training Model
-#        run: |
-#            sleep 4m
-#
-#            rm -rf github_workflows/data/request.json
-#
-#            curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/runs/submit \
-#            -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
-#            -H "Content-Type: application/json" \
-#            --data @github_workflows/data/request.json
-#
-#            rm -rf github_workflows/data/request.json
+      - name: Create And Start A Databricks Job For Training Model
+        run: |
+            sleep 3m
+
+            rm -rf github_workflows/data/request.json
+
+            curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/runs/submit \
+            -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data @github_workflows/data/request.json
+
+            rm -rf github_workflows/data/request.json
   register:
     if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
@@ -45,4 +45,4 @@ jobs:
         uses: actions/checkout@v2
       - name: Echo Something
         run: |
-              echo "I'm a echo from prod stage"
+              echo "I'm a echo from register stage"
