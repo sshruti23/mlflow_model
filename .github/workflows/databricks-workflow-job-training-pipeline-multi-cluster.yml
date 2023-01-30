@@ -1,6 +1,5 @@
 name: Deploy latest repo code as mlproject on databricks
 
-on: [push]
 
 jobs:
   training:
