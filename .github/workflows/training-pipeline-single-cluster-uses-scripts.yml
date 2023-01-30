@@ -1,25 +1,22 @@
 name: Deploy latest repo code as mlproject on databricks
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - never_run
 jobs:
   training:
 #    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name : Install Dependencies
-        run : |
-            python --version 
-            pip install databricks-cli
-      - name : Create a new cluster for databricks job to run
+      - name: Create a new cluster for databricks job to run
         id: cluster_id
-        run : |
+        run: |
             id=$(sh github_workflows/bash/cluster_creation.sh ${{ secrets.AWS_DB_HOST }} ${{ secrets.AWS_DB_TOKEN }})
             echo "$id"
-#            echo "cluster_id=$id" >> $GITHUB_ENV
+#           echo "cluster_id=$id" >> $GITHUB_ENV
       - name: Update pipeline request body json with cluster id
         run: |
             python github_workflows/create_request_body "${{ env.cluster_id }}"
@@ -31,10 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: training
     environment: 'register'
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name : Echo Something
-        run : |
+      - name: Echo Something
+        run: |
               echo "I'm a echo from prod stage"
