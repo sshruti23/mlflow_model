@@ -27,7 +27,7 @@ jobs:
             rm -f token-file
       - name: Submit A Databricks Job For Training model
         run: |
-             curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/submit \
+             curl -X POST https://${{ secrets.AWS_DB_TOKEN }}/api/2.1/jobs/runs/submit \
               -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
               -H "Content-Type: application/json" \
               --data @pipeline_request_body/training.json

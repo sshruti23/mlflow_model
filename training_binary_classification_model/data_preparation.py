@@ -10,7 +10,7 @@ def digitize(n):
 
 def acquire_training_data():
     df = pd.read_csv('/dbfs/data/raw.csv')
-
+    print("acquire_training_data")
     return df
 
 
@@ -20,12 +20,14 @@ def prepare_training_data(data):
     input : Dataframe with expected schema
 
     """
+    print("prepare_training_data")
     data["Delta"] = data["Close"] - data["Open"]
     data["to_predict"] = data["Delta"].apply(lambda d: digitize(d))
     return data
 
 
 def prepare_data(X, Y):
+    print("prepare_data")
     X = pd.DataFrame(X)
     X.columns = ["day_" + str(i) for i in range(14)]
     Y = pd.DataFrame(Y)
