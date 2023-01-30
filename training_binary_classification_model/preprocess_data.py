@@ -1,30 +1,6 @@
-import warnings
-from autogluon.tabular import TabularDataset, TabularPredictor
 import numpy as np
-import datetime
-from pandas_datareader import data as pdr
-import yfinance as yf
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
-import pandas as pd
-from platform import python_version
-import mlflow.sklearn
 
-
-def acquire_training_data():
-    df = pd.read_csv('/dbfs/data/raw.csv')
-
-    return df
-
-
-def digitize(n):
-    if n > 0:
-        return 1
-    return 0
+from training_binary_classification_model.data_preparation import acquire_training_data, prepare_training_data, prepare_data
 
 
 def rolling_window(a, window):
@@ -40,28 +16,6 @@ def rolling_window(a, window):
     shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
     strides = a.strides + (a.strides[-1],)
     return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
-
-
-def prepare_training_data(data):
-    """
-    Return a prepared numpy dataframe
-    input : Dataframe with expected schema
-
-    """
-    data["Delta"] = data["Close"] - data["Open"]
-    data["to_predict"] = data["Delta"].apply(lambda d: digitize(d))
-    return data
-
-
-def prepare_data(X, Y):
-    X = pd.DataFrame(X)
-    X.columns = ["day_" + str(i) for i in range(14)]
-    Y = pd.DataFrame(Y)
-    Y.columns = ["to_predict"]
-    df = pd.concat([X, Y], axis=1)
-
-    train_data, test_data = train_test_split(df, test_size=0.25, random_state=4284)
-    return train_data, test_data
 
 
 if __name__ == "__main__":
