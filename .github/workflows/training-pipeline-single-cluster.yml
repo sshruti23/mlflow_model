@@ -31,8 +31,8 @@ jobs:
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data @github_workflows/data/request.json
-        if: run_id > 0
-            terminate_cluster(env.cluster_id)
+            if: run_id > 0
+            terminate_cluster(cluster_id)
             rm -rf github_workflows/data/request.json       
   register:
     if: github.actor == 'sshruti23'
