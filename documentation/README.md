@@ -50,6 +50,7 @@ This request needs to be followed up by a Job run request by passing the Job id 
 - Post requests to databricks API are authenticated using PAT token .
 - Databricks Repos is set up and latest code is pulled into that. 
 - Storage location considered is dbfs for the poc purpose.
+- AWS_DB_HOST & AWS_DB_TOKEN refer to the databricks host(url) and pat token . These are stores as github repo secrets.
 
 ---
 
