@@ -16,7 +16,7 @@ Training pipeline consists of following stages :
 - Evaluate : Classification report is made available (print statement in current state).
 Model code is kept under folder `training_binary_classification_model`
 
-![Model Stages](model_stages.png)
+![Model Stages](/model_stages.png)
 
 ---
 
