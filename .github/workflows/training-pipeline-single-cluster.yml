@@ -32,7 +32,7 @@ jobs:
             -H "Content-Type: application/json" \
             --data @github_workflows/data/request.json
           if: run_id > 0
-            terminate_cluster(cluster_id)
+            terminate_cluster(env.cluster_id)
             rm -rf github_workflows/data/request.json       
   register:
     if: github.actor == 'sshruti23'
