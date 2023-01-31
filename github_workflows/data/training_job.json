@@ -38,7 +38,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/training_binary_classification_model/ingest_data.py",
+        "python_file": "/Repos/< path to ingest_data.py >",
         "source": "WORKSPACE"
       }
     },
@@ -83,7 +83,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/training_binary_classification_model/preprocess_data.py",
+        "python_file": "/Repos/< path to preprocess_data.py >",
         "source": "WORKSPACE"
       }
     },
@@ -128,7 +128,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/training_binary_classification_model/train.py",
+        "python_file": "/Repos/< path to train.py >",
         "source": "WORKSPACE"
       }
     },
@@ -173,7 +173,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/training_binary_classification_model/evaluate.py",
+        "python_file": "/Repos/< path to evaluate.py >",
         "source": "WORKSPACE"
       }
     }

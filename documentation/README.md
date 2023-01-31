@@ -50,3 +50,9 @@ This request needs to be followed up by a Job run request by passing the Job id 
 - Post requests to databricks API are authenticated using PAT token .
 - Databricks Repos is set up and latest code is pulled into that. 
 - Storage location considered is dbfs for the poc purpose.
+
+---
+
+### Update the branch name in file `.github/workflows/stock-prediction-training-job.yml`  for the github workflow to run.
+
+---
