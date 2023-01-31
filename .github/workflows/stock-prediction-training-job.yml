@@ -20,8 +20,7 @@ jobs:
         run: |
            echo "${{ env.job_id }}"
       - name: Run the Databrick Workflow Job
-        run: |
-          
+        run: |          
           curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/run-now \
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \

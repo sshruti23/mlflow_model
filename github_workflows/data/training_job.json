@@ -2,8 +2,53 @@
   "name": "Binary_Classification_Stock_Prediction_Training_Job",
   "tasks": [
     {
-      "task_key": "Data_Preprocessing",
+      "task_key": "Ingest_Data",
       "depends_on": [],
+      "job_cluster_key": "stock_prediction_training_cluster",
+      "libraries": [
+        {
+          "pypi": {
+            "package": "mlflow"
+          }
+        },
+        {
+          "pypi": {
+            "package": "autogluon"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pandas_datareader"
+          }
+        },
+        {
+          "pypi": {
+            "package": "yfinance"
+          }
+        },
+        {
+          "pypi": {
+            "package": "scikit-learn"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pyspark"
+          }
+        }
+      ],
+      "spark_python_task": {
+        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/training_binary_classification_model/ingest_data.py",
+        "source": "WORKSPACE"
+      }
+    },
+    {
+      "task_key": "Data_Preprocessing",
+      "depends_on": [
+        {
+          "task_key": "Ingest_Data"
+        }
+      ],
       "job_cluster_key": "stock_prediction_training_cluster",
       "libraries": [
         {
