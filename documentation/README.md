@@ -4,6 +4,8 @@
 
 The MLOps POC runs a sample ml model code on databricks cluster . Model code makes use of mlflow for tracking, registering model.
 
+(*If images don't load on web url , clone the repo . Readme should look fine.*)
+
 ### Model Description
 
 Model is a simple binary classification time series problem where based o the value given for 
@@ -55,5 +57,7 @@ This request needs to be followed up by a Job run request by passing the Job id 
 ---
 
 ### Update the branch name in file `.github/workflows/stock-prediction-training-job.yml`  for the github workflow to run.
+
+### Update the Repo path in file `.github_workflows/data/training_job.json`  for field `python_file`.
 
 ---
