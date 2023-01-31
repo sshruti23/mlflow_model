@@ -2,7 +2,7 @@ name: Deploy latest repo code as mlproject on databricks
 on: [push]
 jobs:
   training:
-#    if: github.actor == 'sshruti23'
+    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -16,6 +16,9 @@ jobs:
             --data @github_workflows/data/training_job.json)
            id=$( jq -r  '.job_id' <<< "${output}" )
            echo "job_id=$id" >> $GITHUB_ENV
+      - name: Echo Job Id
+        run: |
+           echo "${{ env.job_id }}"
       - name: Run the Databrick Workflow Job
         run: |
           curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/run-now \

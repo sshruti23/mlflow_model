@@ -1,5 +1,5 @@
 {
-  "name": "Stock_Prediction_Training_Job",
+  "name": "Binary_Classification_Stock_Prediction_Training_Job",
   "tasks": [
     {
       "task_key": "Data_Preprocessing",
