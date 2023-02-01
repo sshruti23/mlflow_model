@@ -27,16 +27,21 @@ jobs:
         run: |
             sleep 3m
 
-            curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/runs/submit \
+            output=$(curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/runs/submit \
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            --data @github_workflows/data/request.json
+            --data @github_workflows/data/request.json)
+            id=$( jq -r  '.run_id' <<< "${output}" )
 
             rm -rf github_workflows/data/request.json  
-            
-      - name: Testing Cluster Termination
+
+      - name: Waiting for Job Completion
         run: |
-            sleep 15m
+            wait -p job_status -n run_id
+            echo "$job_status"
+
+      - name: Cluster Termination
+        run: |
             curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
             -H "Authorization:Bearer dapi9bfdb28f378ba99f7ac949930fb5937e" \
             -H "Content-Type: application/json" \
