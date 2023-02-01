@@ -22,10 +22,7 @@ jobs:
       #TODO: 1. Call Repo API and update the main branch code in databricks
       #TODO: 2. Check if there is a way to check if the cluster has been created or not
       #TODO: 3. remove sleep if 2 works
-      - name : Install Dependencies
-        run : |
-              pip install databricks-cli 
-              
+
       - name: Create And Start A Databricks Job For Training Model
         run: |
             sleep 3m
@@ -37,7 +34,6 @@ jobs:
 
             rm -rf github_workflows/data/request.json  
     
-            databricks clusters delete --cluster-id cluster_id 
               
   register:
     if: github.actor == 'sshruti23'
@@ -50,3 +46,10 @@ jobs:
       - name: Echo Something
         run: |
               echo "I'm a echo from register stage"
+
+    - name: Testing Cluster Termination
+        run: |
+            curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
+            -H "Authorization:Bearer dapi9bfdb28f378ba99f7ac949930fb5937e" \
+            -H "Content-Type: application/json" \
+            --data '{ "cluster_id": "${{ env.cluster_id }}" }'
