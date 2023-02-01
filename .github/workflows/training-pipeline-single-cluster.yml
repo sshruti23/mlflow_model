@@ -35,7 +35,7 @@ jobs:
          #     terminate_cluster(cluster_id = cluster_id, workspace = "https://dbc-024af671-5f60.cloud.databricks.com/")
             curl --netrc -X POST \
             https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
-            --data { "cluster_id" = cluster_id }
+            --data @cluster_id
             rm -rf github_workflows/data/request.json     
               
   register:
