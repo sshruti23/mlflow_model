@@ -24,7 +24,7 @@ jobs:
       #TODO: 3. remove sleep if 2 works
 
       - name: Create And Start A Databricks Job For Training Model
-      id: run_id
+        id: run_id
         run: |
             sleep 3m
 
