@@ -32,7 +32,10 @@ jobs:
             --data @github_workflows/data/request.json
     
             curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.0/clusters/delete \
+            -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
+            -H "Content-Type: application/json" \
             --data '{ "cluster_id": cluster_id }'
+            
             rm -rf github_workflows/data/request.json     
               
   register:
