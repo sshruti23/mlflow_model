@@ -33,7 +33,12 @@ jobs:
             --data @github_workflows/data/request.json
 
             rm -rf github_workflows/data/request.json  
-    
+      - name: Testing Cluster Termination
+        run: |
+            curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
+            -H "Authorization:Bearer dapi9bfdb28f378ba99f7ac949930fb5937e" \
+            -H "Content-Type: application/json" \
+            --data '{ "cluster_id": "${{ env.cluster_id }}" }'
               
   register:
     if: github.actor == 'sshruti23'
@@ -47,9 +52,4 @@ jobs:
         run: |
               echo "I'm a echo from register stage"
 
-    - name: Testing Cluster Termination
-        run: |
-            curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
-            -H "Authorization:Bearer dapi9bfdb28f378ba99f7ac949930fb5937e" \
-            -H "Content-Type: application/json" \
-            --data '{ "cluster_id": "${{ env.cluster_id }}" }'
+    
