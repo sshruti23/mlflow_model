@@ -31,8 +31,7 @@ jobs:
             -H "Content-Type: application/json" \
             --data @github_workflows/data/request.json
     
-            curl --netrc -X POST \
-            https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
+            curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.0/clusters/delete \
             --data '{ "cluster_id": cluster_id }'
             rm -rf github_workflows/data/request.json     
               
