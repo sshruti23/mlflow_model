@@ -23,7 +23,6 @@ jobs:
       #TODO: 2. Check if there is a way to check if the cluster has been created or not
       #TODO: 3. remove sleep if 2 works
       - name: Create And Start A Databricks Job For Training Model
-        #id: run_id
         run: |
             sleep 3m
 
@@ -31,11 +30,10 @@ jobs:
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data @github_workflows/data/request.json
-        #if: run_id > 0
-         #     terminate_cluster(cluster_id = cluster_id, workspace = "https://dbc-024af671-5f60.cloud.databricks.com/")
+    
             curl --netrc -X POST \
             https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
-            --data @cluster_id
+            --data '{ "cluster_id": cluster_id }'
             rm -rf github_workflows/data/request.json     
               
   register:
