@@ -38,7 +38,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/< path to ingest_data.py >",
+        "python_file": "/Repos/< path to stock_prediction/ingest_data.py >",
         "source": "WORKSPACE"
       }
     },
@@ -83,7 +83,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/< path to preprocess_data.py >",
+        "python_file": "/Repos/< path to stock_prediction/preprocess_data.py >",
         "source": "WORKSPACE"
       }
     },
@@ -128,7 +128,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/< path to train.py >",
+        "python_file": "/Repos/< path to stock_prediction/train.py >",
         "source": "WORKSPACE"
       }
     },
@@ -173,7 +173,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/< path to evaluate.py >",
+        "python_file": "/Repos/< path to stock_prediction/evaluate.py >",
         "source": "WORKSPACE"
       }
     }

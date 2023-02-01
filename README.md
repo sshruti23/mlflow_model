@@ -18,7 +18,7 @@ Training pipeline consists of following stages :
 - Evaluate : Classification report is made available (print statement in current state).
 Model code is kept under folder `training_binary_classification_model`
 
-![Model Stages](model_stages.png)
+![Model Stages](documentation/model_stages.png)
 
 ---
 
@@ -31,15 +31,15 @@ The job is launched on databricks using github workflows. The orchestration is d
 
 
 
-![Orchestration](workflows_orchestration.png)
+![Orchestration](documentation/workflows_orchestration.png)
 
 When Job create is sent only Job defination is created, Job is not run at this stage. Job Page :
 
-![Job Page](job_page.png)
+![Job Page](documentation/job_page.png)
 
 This request needs to be followed up by a Job run request by passing the Job id obtained in previous step. Job Run Page :
 
-![Job Run Page](successfull_job.png)
+![Job Run Page](documentation/successfull_job.png)
 
 
 ---
@@ -48,7 +48,7 @@ This request needs to be followed up by a Job run request by passing the Job id 
 *Actual project will have the following steps as a part of workflow / pipeline* . There are api's available for performing the following operations.
 
 
-- Experiment is created in databricks workflow. Experiment name/id is referenced by the mlfow code for the logging part.
+- ML Flow Experiment is created in databricks workflow. Experiment name/id is referenced by the mlfow code for the logging part. 
 - Post requests to databricks API are authenticated using PAT token .
 - Databricks Repos is set up and latest code is pulled into that. 
 - Storage location considered is dbfs for the poc purpose.

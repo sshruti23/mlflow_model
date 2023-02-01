@@ -5,7 +5,6 @@ on:
       - never_run
 jobs:
   training:
-    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -29,7 +28,6 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"job_id": "${{ env.job_id }}" }'
   register:
-    if: github.actor == 'sshruti23'
     runs-on: ubuntu-latest
     needs: training
     environment: 'register'
