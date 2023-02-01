@@ -13,7 +13,7 @@ The entire code is arranged as per the directory structure shared.
 ![Directory_Structure](documentation/directory_structure.png)
 
 ---
-### Model Description
+### Model Stages 
 
 Model is a simple binary classification time series problem where based on the value given for 
 14 days , 15th day stock value is predicted to be either high or low. 
@@ -26,6 +26,22 @@ Training pipeline consists of following stages :
 `data_preparations.py` is a helper class here. Model code is kept under folder `stock_prediction`
 
 ![Model Stages](documentation/model_stages.png)
+
+---
+
+### Workflow Stages 
+
+Github Worflow for training pipeline is divided into two stages . training and register. Register stage is having an environment based approval gate defined. 
+The idea behind this was that the `training` stage would launch a databricks job with tasks including:
+
+ingest_data -> data_preprocess -> train -> evaluate
+
+We expect in actual scenario evaluate to be a stage where the best training results are shared across with stakeholders and then based on manual approval , register stage is run which registers the model in mlflow registry.
+Register step is not included as a part of this training pipeline.
+
+
+![github_workflows](documentation/github_workflows.png)
+
 
 ---
 
