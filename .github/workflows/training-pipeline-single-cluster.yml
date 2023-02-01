@@ -24,6 +24,7 @@ jobs:
       #TODO: 3. remove sleep if 2 works
 
       - name: Create And Start A Databricks Job For Training Model
+      id: run_id
         run: |
             sleep 3m
 
@@ -33,12 +34,11 @@ jobs:
             --data @github_workflows/data/request.json)
             id=$( jq -r  '.run_id' <<< "${output}" )
 
-            rm -rf github_workflows/data/request.json  
-
       - name: Waiting for Job Completion
         run: |
-            wait -p job_status -n run_id
+            wait -p job_status -n "${{ env.run_id }}"
             echo "$job_status"
+            rm -rf github_workflows/data/request.json  
 
       - name: Cluster Termination
         run: |
