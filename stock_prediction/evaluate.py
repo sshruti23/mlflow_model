@@ -1,19 +1,12 @@
 from sklearn.metrics import classification_report
-import pandas as pd
 from delta.tables import *
 
 import mlflow.sklearn
 
 
-def acquire_data(data_path):
-    df = pd.read_csv(data_path)
-
-    return df
-
-
 def find_best_run(metric: str = "training_f1_score"):
     client = mlflow.MlflowClient()
-    experiment_runs = client.search_runs(experiment_ids=["196699694392376"])
+    experiment_runs = client.search_runs(experiment_ids=["<mlflow_experiment_id>"])
     best_run_id = None
     best_artifact_uri = None
     best_metric_score = None

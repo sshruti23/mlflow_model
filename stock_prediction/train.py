@@ -1,16 +1,10 @@
 from sklearn.ensemble import RandomForestClassifier
-import pandas as pd
 import mlflow.sklearn
 from delta.tables import *
 
 
-def acquire_training_data(data_path):
-    df = pd.read_csv(data_path)
-    return df
-
-
 def create_and_log_experiment(X_train, y_train, n_estimators, dlt_table_name, dlt_table_version):
-    mlflow.set_experiment(experiment_id="196699694392376")
+    mlflow.set_experiment(experiment_id="<mlflow_experiment_id>")
     for n_est in n_estimators:
         with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
             mlflow.sklearn.autolog()

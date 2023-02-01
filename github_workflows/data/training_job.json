@@ -179,7 +179,7 @@
     }
   ],
   "git_source": {
-    "git_url": "https://github.com/sshruti23/mlflow_model",
+    "git_url": "<replace the git url here>",
     "git_branch": "main",
     "git_provider": "gitHub"
   },
