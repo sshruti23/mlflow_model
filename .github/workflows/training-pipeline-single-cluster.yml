@@ -37,7 +37,7 @@ jobs:
 
       - name: Waiting for Job Completion
         run: |
-            wait -p job_status -n "${{env.job_id}}"
+            wait -p job_status -n ${{env.job_id}}
             echo "$job_status"
             rm -rf github_workflows/data/request.json  
 
