@@ -22,6 +22,10 @@ jobs:
       #TODO: 1. Call Repo API and update the main branch code in databricks
       #TODO: 2. Check if there is a way to check if the cluster has been created or not
       #TODO: 3. remove sleep if 2 works
+      - name : Install Dependencies
+        run : |
+              pip install databricks-cli 
+              
       - name: Create And Start A Databricks Job For Training Model
         run: |
             sleep 3m
