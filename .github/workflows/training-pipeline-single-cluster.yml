@@ -39,7 +39,9 @@ jobs:
 
       - name: Waiting for Job Completion
         run: |
-            job_details=$(curl -X GET https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/get?run_id=$job_id\
+            sleep 10m
+
+            job_details=$(curl -X GET https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/get?run_id=$env.job_id\
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" )
             
