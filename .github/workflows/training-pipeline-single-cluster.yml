@@ -35,14 +35,21 @@ jobs:
             id=$( jq -r  '.job_id' <<< "${output1}" )
             echo "job_id=$id" >> $GITHUB_ENV
 
+            rm -rf github_workflows/data/request.json 
+
       - name: Waiting for Job Completion
         run: |
-            wait -p job_status -n ${{env.job_id}}
-            echo "$job_status"
-            rm -rf github_workflows/data/request.json  
+            job_details=$(curl -X GET https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/get?run_id=$run_id\
+            -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
+            -H "Content-Type: application/json" )
+            # --data '{run_id="${{run_id}}"}')
+            
+            job_status=$( jq -r  '.state.life_cycle_state' <<< "${job_details}" )
+             
 
       - name: Cluster Termination
         run: |
+            if: job_status != 'RUNNING'       
             curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
