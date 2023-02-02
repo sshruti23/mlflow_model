@@ -33,13 +33,14 @@ jobs:
             -H "Content-Type: application/json" \
             --data @github_workflows/data/request.json)
             id=$( jq -r  '.job_id' <<< "${output1}" )
+            
             echo "job_id=$id" >> $GITHUB_ENV
 
             rm -rf github_workflows/data/request.json 
 
       - name: Waiting for Job Completion
         run: |
-            echo "$env.job_id"       
+            echo "${{env.job_id}}"       
             sleep 10m
 
             job_details=$(curl -X GET https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/get \
