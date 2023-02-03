@@ -26,17 +26,15 @@ jobs:
       - name: Create And Start A Databricks Job For Training Model
         id: job_id
         run: |
-            sleep 3m
+            sleep 3m 
 
             output1=$(curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/runs/submit \
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data @github_workflows/data/request.json)
             id=$( jq -r  '.job_id' <<< "${output1}" )
-            
             echo "job_id=$id" >> $GITHUB_ENV
-
-            rm -rf github_workflows/data/request.json 
+ 
 
       - name: Waiting for Job Completion
         run: |
@@ -48,9 +46,11 @@ jobs:
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data '{ "run_id": "${{ env.job_id }}" }')
+            #--data run_id=${{ env.job_id }})
             
             job_status=$( jq -r  '.state.life_cycle_state' <<< "${job_details}" )
-             
+
+            rm -rf github_workflows/data/request.json
 
       - name: Cluster Termination
         run: |
