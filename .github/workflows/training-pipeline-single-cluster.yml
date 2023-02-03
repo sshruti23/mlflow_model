@@ -41,7 +41,7 @@ jobs:
         run: |
             echo "${{env.job_id}}"  
             echo "$job_run_id"     
-            sleep 10m
+            sleep 15m
 
             job_details=$(curl -X GET https://dbc-024af671-5f60.cloud.databricks.com/api/2.1/jobs/runs/get \
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
@@ -54,13 +54,13 @@ jobs:
 
             rm -rf github_workflows/data/request.json
 
-      #- name: Cluster Termination
-      #  if: env.job_status != 'RUNNING'   
-      #  run: |                
-      #      curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
-      #      -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
-      #      -H "Content-Type: application/json" \
-      #      --data '{ "cluster_id": "${{ env.cluster_id }}" }'
+      - name: Cluster Termination
+        if: env.job_status != 'RUNNING'   
+        run: |                
+            curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
+            -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{ "cluster_id": "${{ env.cluster_id }}" }'
               
   register:
     if: github.actor == 'sshruti23'
