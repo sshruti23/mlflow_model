@@ -37,6 +37,7 @@ jobs:
             echo $job_run_id
             echo "job_id=$job_run_id" >> $GITHUB_ENV
       - name: Waiting for Job Completion
+        id: job_status
         run: |
             echo "${{env.job_id}}"  
             echo "$job_run_id"     
@@ -49,16 +50,17 @@ jobs:
             
             job_status=$( jq -r  '.state.life_cycle_state' <<< "${job_details}" )
             echo $job_status
+            echo "job_status=$job_status" >> $GITHUB_ENV
 
             rm -rf github_workflows/data/request.json
 
-      - name: Cluster Termination
-        if: job_status != 'RUNNING'   
-        run: |                
-            curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
-            -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            --data '{ "cluster_id": "${{ env.cluster_id }}" }'
+      #- name: Cluster Termination
+      #  if: env.job_status != 'RUNNING'   
+      #  run: |                
+      #      curl -X POST https://dbc-024af671-5f60.cloud.databricks.com/api/2.0/clusters/delete \
+      #      -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
+      #      -H "Content-Type: application/json" \
+      #      --data '{ "cluster_id": "${{ env.cluster_id }}" }'
               
   register:
     if: github.actor == 'sshruti23'
