@@ -37,8 +37,8 @@
           }
         }
       ],
-      "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_ingestion.py",
+      "notebook_task": {
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_ingestion.py",
         "source": "WORKSPACE"
       }
     },
@@ -82,8 +82,8 @@
           }
         }
       ],
-      "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_preprocess.py",
+      "notebook_task": {
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_preprocess.py",
         "source": "WORKSPACE"
       }
     },
@@ -127,8 +127,8 @@
           }
         }
       ],
-      "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/train.py",
+      "notebook_task": {
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/train.py",
         "source": "WORKSPACE"
       }
     },
@@ -172,8 +172,8 @@
           }
         }
       ],
-      "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/evaluate.py",
+      "notebook_task": {
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/evaluate.py",
         "source": "WORKSPACE"
       }
     }
