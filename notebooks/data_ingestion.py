@@ -19,3 +19,4 @@ def download_yfinance_data():
 # COMMAND ----------
 
 download_yfinance_data()
+

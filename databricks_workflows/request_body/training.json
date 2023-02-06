@@ -38,7 +38,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_ingestion.py",
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_ingestion",
         "source": "WORKSPACE"
       }
     },
@@ -83,7 +83,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_preprocess.py",
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_preprocess",
         "source": "WORKSPACE"
       }
     },
@@ -128,7 +128,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/train.py",
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/train",
         "source": "WORKSPACE"
       }
     },
@@ -173,7 +173,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/evaluate.py",
+        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/evaluate",
         "source": "WORKSPACE"
       }
     }
