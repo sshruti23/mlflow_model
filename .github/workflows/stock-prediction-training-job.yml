@@ -13,7 +13,7 @@ jobs:
           output=$(curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/create \
             -H "Authorization:Bearer ${{ secrets.AWS_DB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            --data @github_workflows/data/training_job.json)
+            --data @databricks_workflows/request_body/training_job.json)
            id=$( jq -r  '.job_id' <<< "${output}" )
            echo "job_id=$id" >> $GITHUB_ENV
       - name: Echo Job Id
