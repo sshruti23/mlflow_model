@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from training_binary_classification_model.data_preparation import acquire_training_data, prepare_training_data, prepare_data
+from src.data_preparation import acquire_training_data, prepare_training_data, prepare_data
 
 
 # COMMAND ----------
