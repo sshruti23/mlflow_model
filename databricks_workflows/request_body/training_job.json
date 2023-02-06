@@ -38,7 +38,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/ingest_data.py",
+        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_ingestion.py",
         "source": "WORKSPACE"
       }
     },
@@ -83,7 +83,7 @@
         }
       ],
       "spark_python_task": {
-        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/preprocess_data.py",
+        "python_file": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_preprocess.py",
         "source": "WORKSPACE"
       }
     },
