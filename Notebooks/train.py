@@ -1,13 +1,11 @@
+# Databricks notebook source
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import mlflow.sklearn
 from delta.tables import *
 
 
-def acquire_training_data(data_path):
-    df = pd.read_csv(data_path)
-    return df
-
+# COMMAND ----------
 
 def create_and_log_experiment(X_train, y_train, n_estimators, dlt_table_name, dlt_table_version):
     mlflow.set_experiment(experiment_id="196699694392376")
@@ -28,11 +26,12 @@ def create_and_log_experiment(X_train, y_train, n_estimators, dlt_table_name, dl
             mlflow.log_param("train_table_version", dlt_table_version)
 
 
-if __name__ == "__main__":
-    dlt_table_name = "default.train"
-    dlt_table = DeltaTable.forName(spark, dlt_table_name)
-    dlt_table_version = dlt_table.history().head(1)[0].version
-    train_data = dlt_table.toDF().toPandas()
-    y_train = train_data['to_predict']
-    X_train = train_data.drop('to_predict', axis=1)
-    create_and_log_experiment(X_train, y_train, [50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)
+# COMMAND ----------
+
+dlt_table_name = "default.train"
+dlt_table = DeltaTable.forName(spark, dlt_table_name)
+dlt_table_version = dlt_table.history().head(1)[0].version
+train_data = dlt_table.toDF().toPandas()
+y_train = train_data['to_predict']
+X_train = train_data.drop('to_predict', axis=1)
+create_and_log_experiment(X_train, y_train, [50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)

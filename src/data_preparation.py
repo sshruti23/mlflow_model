@@ -1,6 +1,9 @@
+# Databricks notebook source
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+
+# COMMAND ----------
 
 def digitize(n):
     if n > 0:
@@ -8,11 +11,15 @@ def digitize(n):
     return 0
 
 
+# COMMAND ----------
+
 def acquire_training_data():
     df = pd.read_csv('/dbfs/data/raw.csv')
     print("acquire_training_data")
     return df
 
+
+# COMMAND ----------
 
 def prepare_training_data(data):
     """
@@ -25,6 +32,8 @@ def prepare_training_data(data):
     data["to_predict"] = data["Delta"].apply(lambda d: digitize(d))
     return data
 
+
+# COMMAND ----------
 
 def prepare_data(X, Y):
     print("prepare_data")

@@ -1,8 +1,10 @@
+# Databricks notebook source
 import datetime
 
 from pandas_datareader import data as pdr
 import yfinance as yf
 
+# COMMAND ----------
 
 def download_yfinance_data():
     yf.pdr_override()
@@ -14,5 +16,6 @@ def download_yfinance_data():
     df.to_csv('/dbfs/data/raw.csv', mode='x')
 
 
-if __name__ == "__main__":
-    download_yfinance_data()
+# COMMAND ----------
+
+download_yfinance_data()
