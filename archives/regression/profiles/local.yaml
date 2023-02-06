@@ -11,12 +11,12 @@ SPLIT_RATIOS: [ 0.80, 0.10, 0.10 ]
 
 INGEST_CONFIG:
   using: parquet
-  location: "./data/sample.parquet"
+  location: "./request_body/sample.parquet"
 
 INGEST_SCORING_CONFIG:
   using: parquet
-  location: "./data/sample.parquet"
+  location: "./request_body/sample.parquet"
 
 PREDICT_OUTPUT_CONFIG:
   using: parquet
-  location: "./data/sample_output.parquet"
+  location: "./request_body/sample_output.parquet"

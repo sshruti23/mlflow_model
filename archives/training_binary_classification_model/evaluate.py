@@ -19,7 +19,7 @@ def find_best_run(metric: str = "training_f1_score"):
     best_metric_score = None
     for run in experiment_runs:
         print(run.info)
-        print("Run data metrics :" + str(run.data.metrics))
+        print("Run request_body metrics :" + str(run.data.metrics))
         if not metric in run.data.metrics:
             print(metric)
             raise Exception("Bad metric passed for evaluation.")

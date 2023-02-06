@@ -1,6 +1,6 @@
 import numpy as np
 
-from training_binary_classification_model.data_preparation import acquire_training_data, prepare_training_data, prepare_data
+from archives.training_binary_classification_model.data_preparation import acquire_training_data, prepare_training_data, prepare_data
 
 
 def rolling_window(a, window):

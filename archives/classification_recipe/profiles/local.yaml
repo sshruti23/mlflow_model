@@ -11,14 +11,14 @@ SPLIT_RATIOS: [ 0.80, 0.10, 0.10 ]
 
 INGEST_CONFIG:
   using: csv
-  location: [ "./data/data.csv" ]
+  location: [ "./request_body/request_body.csv" ]
   loader_method: load_file_as_dataframe
 
 INGEST_SCORING_CONFIG:
   using: csv
-  location: "./data/data.csv"
+  location: "./request_body/request_body.csv"
 #  loader_method: load_file_as_dataframe
 
 PREDICT_OUTPUT_CONFIG:
   using: csv
-  location: "./data/data.csv"
+  location: "./request_body/request_body.csv"

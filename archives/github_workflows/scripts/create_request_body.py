@@ -5,12 +5,12 @@ import json
 
 
 def get(databricks_cluster_id: str):
-    file = open("github_workflows/data/training_single_cluster.json")
+    file = open("databricks_workflows/request_body/training_single_cluster.json")
     data = json.load(file)
     template = Template(str(data))
 
     request_body = template.render(cluster_id=databricks_cluster_id)
-    with open("github_workflows/data/request.json", "w+") as outfile:
+    with open("databricks_workflows/request_body/request.json", "w+") as outfile:
         outfile.write(request_body.replace("\'", "\""))
 
 

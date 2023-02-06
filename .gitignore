@@ -4,9 +4,9 @@ local/
 AutogluonModels/
 *.ipynb_checkpoints
 .DS_Store
-classification_recipe/artifacts
-regression/artifacts
-regression/registry/models
+archives/classification_recipe/artifacts
+archives/regression/artifacts
+archives/regression/registry/models
 dist/
 *.egg-info/
 build/

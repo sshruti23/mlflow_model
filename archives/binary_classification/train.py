@@ -120,7 +120,7 @@ def acquire_training_data():
 
 
 if __name__ == "__main__":
-    # data preparation
+    # request_body preparation
     training_data = acquire_training_data()
     prepared_training_data_df = prepare_training_data(training_data)
     btc_mat = prepared_training_data_df.to_numpy()

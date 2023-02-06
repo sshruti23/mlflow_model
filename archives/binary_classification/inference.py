@@ -51,7 +51,7 @@ def prepare_training_data(data):
 
 
 def pull_data():
-    input_df = pd.read_csv('/dbfs/data/inference.csv')
+    input_df = pd.read_csv('/dbfs/request_body/inference.csv')
     btc_mat = input_df.to_numpy()
 
     WINDOW_SIZE = 14
@@ -88,7 +88,7 @@ def find_best_run(metric: str = "training_f1_score"):
     best_artifact_uri = None
     best_metric_score = None
     for run in experiment_runs:
-        print("Run data metrics :" + str(run.data.metrics))
+        print("Run request_body metrics :" + str(run.data.metrics))
         if not metric in run.data.metrics:
             print(metric)
             raise Exception("Bad metric passed for evaluation.")
