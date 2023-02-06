@@ -18,7 +18,7 @@ jobs:
            echo "job_id=$id" >> $GITHUB_ENV
       - name: Echo Job Id
         run: |
-           echo "${{ env.job_id }}"
+           echo "Job ID : ${{ env.job_id }}"
       - name: Run the Databrick Workflow Job
         run: |          
           curl -X POST https://${{ secrets.AWS_DB_HOST }}/api/2.1/jobs/run-now \
