@@ -9,7 +9,7 @@ def digitize(n):
 
 
 def acquire_training_data():
-    df = pd.read_csv('/dbfs/request_body/raw.csv')
+    df = pd.read_csv('/dbfs/data/raw.csv')
     print("acquire_training_data")
     return df
 
