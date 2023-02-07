@@ -33,6 +33,26 @@ def prepare_data(X, Y):
     Y = pd.DataFrame(Y)
     Y.columns = ["to_predict"]
     df = pd.concat([X, Y], axis=1)
+    # df* convert to spark df ---> add primary key --> create fs
 
+
+    # remove this line
     train_data, test_data = train_test_split(df, test_size=0.25, random_state=4284)
     return train_data, test_data
+
+
+# fs --> day 1 - day 14 | -- to_predict | ++ primary key
+# raw_df --> yahoo data
+#     created features
+#     dumped periodiaclly
+#     cadence
+#
+# inference_df -> delta
+#
+# re train in 30 days
+# - fs features
+# - lables
+# - pull fs lookup  & pull delta inference df & merge and create a training df
+
+
+

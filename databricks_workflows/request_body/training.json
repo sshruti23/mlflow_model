@@ -38,8 +38,8 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_ingestion",
-        "source": "WORKSPACE"
+        "notebook_path": "/notebooks/data_ingestion",
+        "source": "GIT"
       }
     },
     {
@@ -83,8 +83,8 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/data_preprocess",
-        "source": "WORKSPACE"
+        "notebook_path": "/notebooks/data_preprocess",
+        "source": "GIT"
       }
     },
     {
@@ -128,8 +128,8 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/train",
-        "source": "WORKSPACE"
+        "notebook_path": "/notebooks/train",
+        "source": "GIT"
       }
     },
     {
@@ -173,8 +173,8 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/Repos/shruti.s1@thoughtworks.com/mlflow_model/notebooks/evaluate",
-        "source": "WORKSPACE"
+        "notebook_path": "/notebooks/evaluate",
+        "source": "GIT"
       }
     }
   ],

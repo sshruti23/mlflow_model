@@ -26,8 +26,9 @@ def rolling_window(a, window):
 
 # COMMAND ----------
 
-training_data = acquire_training_data()
-prepared_training_data_df = prepare_training_data(training_data)
+training_data = read_raw_delta_table()
+# feature
+prepared_training_data_df = prepare_training_data(training_data.toDF().toPandas())
 btc_mat = prepared_training_data_df.to_numpy()
 WINDOW_SIZE = 14
 X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
