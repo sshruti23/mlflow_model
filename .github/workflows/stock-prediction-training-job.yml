@@ -1,8 +1,5 @@
 name: Deploy latest repo code as mlproject on databricks
-on:
-  push:
-    branches:
-      - never_run
+on: [push]
 jobs:
   training:
     if: github.actor == 'sshruti23'
