@@ -176,6 +176,50 @@
         "notebook_path": "notebooks/evaluate",
         "source": "GIT"
       }
+    },{
+      "task_key": "Register",
+      "depends_on": [
+        {
+          "task_key": "Evaluate"
+        }
+      ],
+      "job_cluster_key": "stock_prediction_training_cluster",
+      "libraries": [
+        {
+          "pypi": {
+            "package": "mlflow"
+          }
+        },
+        {
+          "pypi": {
+            "package": "autogluon"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pandas_datareader"
+          }
+        },
+        {
+          "pypi": {
+            "package": "yfinance"
+          }
+        },
+        {
+          "pypi": {
+            "package": "scikit-learn"
+          }
+        },
+        {
+          "pypi": {
+            "package": "pyspark"
+          }
+        }
+      ],
+      "notebook_task": {
+        "notebook_path": "notebooks/register",
+        "source": "GIT"
+      }
     }
   ],
   "git_source": {
