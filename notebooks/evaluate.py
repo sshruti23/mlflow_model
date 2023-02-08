@@ -36,7 +36,10 @@ import mlflow.sklearn
 
 # COMMAND ----------
 
-dlt_table_name = "default.test"
+#default.training_set
+
+
+dlt_table_name = "default.training_set"
 dlt_table = DeltaTable.forName(spark, dlt_table_name)
 test_data = dlt_table.toDF().toPandas()
 y_test = test_data['to_predict']
@@ -45,5 +48,10 @@ X_test = test_data.drop('to_predict', axis=1)
 best_run_id, best_artifact_uri, best_metric_score = find_best_run()
 best_model = mlflow.sklearn.load_model(f"runs:/{best_run_id}/model")
 y_predict = best_model.predict(X_test)
+
+
+
+
+# COMMAND ----------
 
 print(classification_report(y_test, y_predict))

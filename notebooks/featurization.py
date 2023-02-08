@@ -106,5 +106,6 @@ create_feature_store(df_with_label.drop("to_predict"))
 
 # write this df as delta , getting used by train 
 inference_data_df = df_with_label.select("row_id", "to_predict")
-inference_data_df.write.format("delta").save("dbfs:/inference_data_df")
+#spark.createDataFrame(train_data).write.format("delta").mode("overwrite").saveAsTable("default.train")
+inference_data_df.write.format("delta").mode("overwrite").save("dbfs:/inference_data_df")
 display(inference_data_df)

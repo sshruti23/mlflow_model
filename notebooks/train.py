@@ -3,17 +3,21 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import mlflow.sklearn
 from delta.tables import *
+from databricks import feature_store
+from databricks.feature_store import feature_table, FeatureLookup
+from mlflow.tracking.client import MlflowClient
+from sklearn.model_selection import train_test_split
 
 # COMMAND ----------
 
-def create_delta_table(table_name, df):
-    spark.createDataFrame(df).write.format("delta").mode("overwrite").saveAsTable(table_name)
+def create_delta_table_for_df(table_name, df):
+    df.write.format("delta").mode("overwrite").saveAsTable(table_name)
 
 # COMMAND ----------
 
 def read_inference_delta_table():
     inference_df = DeltaTable.forPath(spark, "dbfs:/inference_data_df")
-    return inference_df
+    return inference_df.toDF()
 
 # COMMAND ----------
 
@@ -23,7 +27,6 @@ def load_data(table_name, lookup_key):
     training_set = fs.create_training_set(inference_data_df, model_feature_lookups, label="to_predict", exclude_columns="row_id")
     training_pd = training_set.load_df().toPandas()
     X = training_pd.drop("to_predict", axis=1)
-    display(X)
     y = training_pd["to_predict"]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
     return X_train, X_test, y_train, y_test, training_set
@@ -71,9 +74,8 @@ mlflow.sklearn.autolog(log_models=False)
 
 # COMMAND ----------
 
-table_name= dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_table_name", default = "stock_pred", debugValue = 0)
-fs = dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_client", default = None, debugValue = 0)
-
+table_name= dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_table_name", default = "stockpred_dbebfee8", debugValue = 0)
+fs = feature_store.FeatureStoreClient()
 print(table_name)
 
 
@@ -87,5 +89,9 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
-create_delta_table("default.train", X_train)
-create_delta_table("default.test", X_test)
+display(training_set.load_df())
+
+# COMMAND ----------
+
+create_delta_table_for_df("default.training_set",training_set.load_df())
+

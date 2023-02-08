@@ -42,9 +42,5 @@ def create_feature_store(feature_store_df):
     df=feature_store_df,
     schema=feature_store_df.schema,
     description="stockpred features"
-)
-
-# COMMAND ----------
-
-dbutils.jobs.taskValues.set(key = 'fs_table_name', value = table_name)
-dbutils.jobs.taskValues.set(key = 'fs_client', value = fs)
+    )
+    dbutils.jobs.taskValues.set(key = 'fs_table_name', value = table_name)
