@@ -38,7 +38,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/notebooks/data_ingestion",
+        "notebook_path": "notebooks/data_ingestion",
         "source": "GIT"
       }
     },
@@ -83,7 +83,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/notebooks/data_preprocess",
+        "notebook_path": "notebooks/featurization",
         "source": "GIT"
       }
     },
@@ -128,7 +128,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/notebooks/train",
+        "notebook_path": "notebooks/train",
         "source": "GIT"
       }
     },
@@ -173,7 +173,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "/notebooks/evaluate",
+        "notebook_path": "notebooks/evaluate",
         "source": "GIT"
       }
     }
