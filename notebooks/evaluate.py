@@ -49,6 +49,8 @@ best_run_id, best_artifact_uri, best_metric_score = find_best_run()
 best_model = mlflow.sklearn.load_model(f"runs:/{best_run_id}/model")
 y_predict = best_model.predict(X_test)
 
+dbutils.jobs.taskValues.set(key = 'best_artifact_uri', value = best_artifact_uri)
+
 
 
 
