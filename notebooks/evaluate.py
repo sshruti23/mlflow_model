@@ -46,6 +46,7 @@ y_test = test_data['to_predict']
 X_test = test_data.drop('to_predict', axis=1)
 
 best_run_id, best_artifact_uri, best_metric_score = find_best_run()
+print(best_artifact_uri)
 best_model = mlflow.sklearn.load_model(f"runs:/{best_run_id}/model")
 y_predict = best_model.predict(X_test)
 
