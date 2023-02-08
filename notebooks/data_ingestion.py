@@ -33,5 +33,6 @@ def create_raw_delta_lake():
 
 # COMMAND ----------
 
+print("Running from feature store branch")
 source_df = download_yfinance_data()
 create_raw_delta_lake()
