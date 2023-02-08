@@ -36,7 +36,7 @@ def load_data(table_name, lookup_key):
 def train_model(X_train, X_test, y_train, y_test, training_set, fs):
     ## fit and log model
     n_estimators=[50, 100, 200, 500, 1000]
-    mlflow.set_experiment(experiment_id="196699694392376")
+    mlflow.set_experiment(experiment_id="1335986235541854")
     for n_est in n_estimators:
         with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
             rf = RandomForestClassifier(bootstrap=True,

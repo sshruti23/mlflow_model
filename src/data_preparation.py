@@ -6,6 +6,7 @@ from delta.tables import *
 
 # COMMAND ----------
 
+
 def digitize(n):
     if n > 0:
         return 1
@@ -13,6 +14,7 @@ def digitize(n):
 
 
 # COMMAND ----------
+
 
 def prepare_training_data(data):
     """
@@ -36,5 +38,5 @@ def prepare_data(X, Y):
     Y.columns = ["to_predict"]
     print(X.size)
     print(Y.size)
-    df = pd.concat([X, Y] , axis=1)
+    df = pd.concat([X, Y], axis=1)
     return df

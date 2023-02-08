@@ -11,7 +11,7 @@ import numpy as np
 
 from pyspark.sql.functions import monotonically_increasing_id
 
-from pyspark.sql.types import DoubleType , DateType , LongType
+from pyspark.sql.types import DoubleType, DateType, LongType
 import uuid
 from mlflow.tracking.client import MlflowClient
 
@@ -20,6 +20,7 @@ import pandas as pd
 import mlflow.sklearn
 
 # COMMAND ----------
+
 
 def rolling_window(a, window):
     """
@@ -38,44 +39,52 @@ def rolling_window(a, window):
 
 # COMMAND ----------
 
+
 def read_raw_delta_table():
     src_delta_table = DeltaTable.forPath(spark, "dbfs:/stockpred_delta_lake/")
     return src_delta_table
 
+
 # COMMAND ----------
+
 
 def change_column_datatype(df):
-    output_df = df \
-      .withColumn("Close", df["Close"].cast(DoubleType())) \
-      .withColumn("Open", df["Open"].cast(DoubleType())) \
-      .withColumn("Date", df["Date"].cast(DateType())) \
-      .withColumn("High", df["High"].cast(DoubleType())) \
-      .withColumn("Low", df["Low"].cast(DoubleType())) \
-      .withColumn("Adj_Close", df["Adj_Close"].cast(LongType())) \
-      .withColumn("Volume", df["Volume"].cast(DoubleType())) 
+    output_df = (
+        df.withColumn("Close", df["Close"].cast(DoubleType()))
+        .withColumn("Open", df["Open"].cast(DoubleType()))
+        .withColumn("Date", df["Date"].cast(DateType()))
+        .withColumn("High", df["High"].cast(DoubleType()))
+        .withColumn("Low", df["Low"].cast(DoubleType()))
+        .withColumn("Adj_Close", df["Adj_Close"].cast(LongType()))
+        .withColumn("Volume", df["Volume"].cast(DoubleType()))
+    )
     return output_df
+
 
 # COMMAND ----------
 
-def add_primary_key(training_data , id_column_name):
+
+def add_primary_key(training_data, id_column_name):
     """Add id column to dataframe"""
     columns = training_data.columns
     new_df = training_data.withColumn(id_column_name, monotonically_increasing_id())
     return new_df[[id_column_name] + columns]
 
+
 # COMMAND ----------
+
 
 def create_df_with_label(df):
-    spark_df_with_label=spark.createDataFrame(df)
-    df_with_primary_key=add_primary_key(spark_df_with_label ,'row_id')
+    spark_df_with_label = spark.createDataFrame(df)
+    df_with_primary_key = add_primary_key(spark_df_with_label, "row_id")
     return df_with_primary_key
-    
+
 
 # COMMAND ----------
 
-training_data = read_raw_delta_table() # source delta_table
+training_data = read_raw_delta_table()  # source delta_table
 transformed_df = change_column_datatype(training_data.toDF())
-raw_df=prepare_training_data(transformed_df.toPandas())
+raw_df = prepare_training_data(transformed_df.toPandas())
 btc_mat = raw_df.to_numpy()
 WINDOW_SIZE = 14
 display(btc_mat)
@@ -86,11 +95,11 @@ complete_df_with_label = prepare_data(X, Y)
 
 # COMMAND ----------
 
- df_with_label = create_df_with_label(complete_df_with_label)
+df_with_label = create_df_with_label(complete_df_with_label)
 
 # COMMAND ----------
 
-# creating feature df 
+# creating feature df
 display(training_data.toDF())
 
 # COMMAND ----------
@@ -104,8 +113,9 @@ create_feature_store(df_with_label.drop("to_predict"))
 
 # COMMAND ----------
 
-# write this df as delta , getting used by train 
+# write this df as delta , getting used by train
 inference_data_df = df_with_label.select("row_id", "to_predict")
-#spark.createDataFrame(train_data).write.format("delta").mode("overwrite").saveAsTable("default.train")
-inference_data_df.write.format("delta").mode("overwrite").save("dbfs:/inference_data_df")
+inference_data_df.write.format("delta").mode("overwrite").save(
+    "dbfs:/inference_data_df"
+)
 display(inference_data_df)
