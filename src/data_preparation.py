@@ -1,8 +1,4 @@
 # Databricks notebook source
-# MAGIC %run ./data_featurization
-
-# COMMAND ----------
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from delta.tables import *

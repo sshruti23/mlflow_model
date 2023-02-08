@@ -6,6 +6,11 @@ from delta.tables import *
 
 # COMMAND ----------
 
+def create_delta_table(table_name, df):
+    spark.createDataFrame(df).write.format("delta").mode("overwrite").saveAsTable(table_name)
+
+# COMMAND ----------
+
 def read_inference_delta_table():
     inference_df = DeltaTable.forPath(spark, "dbfs:/inference_data_df")
     return inference_df
@@ -28,6 +33,7 @@ def load_data(table_name, lookup_key):
 def train_model(X_train, X_test, y_train, y_test, training_set, fs):
     ## fit and log model
     n_estimators=[50, 100, 200, 500, 1000]
+    mlflow.set_experiment(experiment_id="196699694392376")
     for n_est in n_estimators:
         with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
             rf = RandomForestClassifier(bootstrap=True,
@@ -78,3 +84,8 @@ X_train, X_test, y_train, y_test, training_set = load_data(table_name, "row_id")
 # COMMAND ----------
 
 train_model(X_train, X_test, y_train, y_test, training_set, fs)
+
+# COMMAND ----------
+
+create_delta_table("default.train", X_train)
+create_delta_table("default.test", X_test)
