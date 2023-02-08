@@ -6,30 +6,75 @@ from delta.tables import *
 
 # COMMAND ----------
 
-def create_and_log_experiment(X_train, y_train, n_estimators, dlt_table_name, dlt_table_version):
-    mlflow.set_experiment(experiment_id="196699694392376")
-    for n_est in n_estimators:
-        with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
-            mlflow.sklearn.autolog()
-            clf = RandomForestClassifier(
-                bootstrap=True,
-                criterion='gini',
-                min_samples_split=2,
-                min_weight_fraction_leaf=0.1,
-                n_estimators=n_est,
-                random_state=4284,
-                verbose=0)
-
-            clf.fit(X_train, y_train)
-            mlflow.log_param("train_table", dlt_table_name)
-            mlflow.log_param("train_table_version", dlt_table_version)
+def read_inference_delta_table():
+    inference_df = DeltaTable.forPath(spark, "dbfs:/inference_data_df")
+    return inference_df
 
 # COMMAND ----------
 
-dlt_table_name = "default.train"
-dlt_table = DeltaTable.forName(spark, dlt_table_name)
-dlt_table_version = dlt_table.history().head(1)[0].version
-train_data = dlt_table.toDF().toPandas()
-y_train = train_data['to_predict']
-X_train = train_data.drop('to_predict', axis=1)
-create_and_log_experiment(X_train, y_train, [50, 100, 200, 500, 1000], dlt_table_name, dlt_table_version)
+def load_data(table_name, lookup_key):
+    model_feature_lookups = [FeatureLookup(table_name=table_name, lookup_key=lookup_key)]
+    inference_data_df = read_inference_delta_table()
+    training_set = fs.create_training_set(inference_data_df, model_feature_lookups, label="to_predict", exclude_columns="row_id")
+    training_pd = training_set.load_df().toPandas()
+    X = training_pd.drop("to_predict", axis=1)
+    display(X)
+    y = training_pd["to_predict"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+    return X_train, X_test, y_train, y_test, training_set
+
+# COMMAND ----------
+
+def train_model(X_train, X_test, y_train, y_test, training_set, fs):
+    ## fit and log model
+    n_estimators=[50, 100, 200, 500, 1000]
+    for n_est in n_estimators:
+        with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
+            rf = RandomForestClassifier(bootstrap=True,
+                    criterion='gini',
+                    min_samples_split=2,
+                    min_weight_fraction_leaf=0.1,
+                    n_estimators=n_est,
+                    random_state=42,
+                    verbose=0)
+            
+            rf.fit(X_train, y_train)
+            y_pred = rf.predict(X_test)
+            fs.log_model(
+                model=rf,
+                artifact_path="binary_classification_stock_prediction",
+                flavor=mlflow.sklearn,
+                training_set=training_set,
+                registered_model_name="stockpred_model",
+            )
+
+# COMMAND ----------
+
+
+client = MlflowClient()
+
+try:
+    client.delete_registered_model("stockpred_model") # Delete the model if already created
+except:
+    None
+
+# COMMAND ----------
+
+# Disable MLflow autologging and instead log the model using Feature Store
+mlflow.sklearn.autolog(log_models=False)
+
+# COMMAND ----------
+
+table_name= dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_table_name", default = "stock_pred", debugValue = 0)
+fs = dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_client", default = None, debugValue = 0)
+
+print(table_name)
+
+
+# COMMAND ----------
+
+X_train, X_test, y_train, y_test, training_set = load_data(table_name, "row_id")
+
+# COMMAND ----------
+
+train_model(X_train, X_test, y_train, y_test, training_set, fs)

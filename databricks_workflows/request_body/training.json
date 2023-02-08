@@ -43,7 +43,7 @@
       }
     },
     {
-      "task_key": "Data_Preprocessing",
+      "task_key": "Featurization",
       "depends_on": [
         {
           "task_key": "Ingest_Data"
@@ -91,7 +91,7 @@
       "task_key": "Training",
       "depends_on": [
         {
-          "task_key": "Data_Preprocessing"
+          "task_key": "Featurization"
         }
       ],
       "job_cluster_key": "stock_prediction_training_cluster",
