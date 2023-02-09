@@ -4,7 +4,7 @@ import mlflow.sklearn
 
 # COMMAND ----------
 
-version= dbutils.jobs.taskValues.get(taskKey = "Evaluate", key = "version", default = None, debugValue = 0)
+version= dbutils.jobs.taskValues.get(taskKey = "Evaluate", key = "best_model_version", default = None, debugValue = 0)
 print(f"best model version {version}")
 
 
