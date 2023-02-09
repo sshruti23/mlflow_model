@@ -1,11 +1,27 @@
 # Databricks notebook source
+# MAGIC %md #Helper Notebook - Feature Store
+
+# COMMAND ----------
+
+# MAGIC %md ##Imports
+
+# COMMAND ----------
+
 from databricks import feature_store
 from databricks.feature_store import feature_table, FeatureLookup
 import uuid
 
 # COMMAND ----------
 
+# MAGIC %md ##Create Feature Store Client
+
+# COMMAND ----------
+
 fs = feature_store.FeatureStoreClient()
+
+# COMMAND ----------
+
+# MAGIC %md ##Create Feature store database and store df as feature table
 
 # COMMAND ----------
 
@@ -16,9 +32,6 @@ def create_feature_store_database():
     global table_name
     table_name = f"stockpred_db" + str(uuid.uuid4())[:6]
     print(table_name)
-
-
-# COMMAND ----------
 
 def create_feature_store(feature_store_df):
     display(feature_store_df)
