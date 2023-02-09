@@ -1,4 +1,15 @@
 # Databricks notebook source
+# MAGIC %md #Evaluation
+# MAGIC ###- Figures out best run for current experiment
+# MAGIC ###- Make prediction for the best run 
+# MAGIC ###- Prints classification report
+
+# COMMAND ----------
+
+# MAGIC %md ##Pypi package and imports
+
+# COMMAND ----------
+
 # MAGIC %pip install databricks-feature-store
 
 # COMMAND ----------
@@ -15,11 +26,18 @@ from databricks.feature_store import feature_table, FeatureLookup
 
 # COMMAND ----------
 
+# MAGIC %md ## Create MLFlow Client
+
+# COMMAND ----------
+
 client = mlflow.MlflowClient()
 
 
 # COMMAND ----------
 
+# MAGIC %md ##Find best run for a given experiment 
+
+# COMMAND ----------
 
 def find_best_run(metric: str = "training_f1_score"):
     experiment_runs = client.search_runs(experiment_ids=["1335986235541854"])
@@ -42,6 +60,13 @@ def find_best_run(metric: str = "training_f1_score"):
                     best_metric_score = metrics[metric]
     return best_run_id, best_artifact_uri, best_metric_score 
 
+best_run_id, best_artifact_uri, best_metric_score = find_best_run()
+print(best_artifact_uri)
+print(best_run_id)
+
+# COMMAND ----------
+
+# MAGIC %md ##Create data for prediction
 
 # COMMAND ----------
 
@@ -52,14 +77,13 @@ test_data = dlt_table.toDF().toPandas()
 y_test = test_data["to_predict"]
 X_test = test_data.drop("to_predict", axis=1)
 
-best_run_id, best_artifact_uri, best_metric_score = find_best_run()
-print(best_artifact_uri)
-print(best_run_id)
-
 
 
 # COMMAND ----------
 
+# MAGIC %md ##Find model version for best run 
+
+# COMMAND ----------
 
 run_id = best_run_id    
 filter_string = "run_id='{}'".format(run_id)
@@ -67,6 +91,10 @@ print(filter_string)
 results = client.search_model_versions(filter_string)
 version=results[0].version
 print(version)
+
+# COMMAND ----------
+
+# MAGIC %md ##Score Batch for best version model
 
 # COMMAND ----------
 
@@ -78,7 +106,6 @@ def read_inference_delta_table():
 
 inference_data_df = read_inference_delta_table()
 fs = feature_store.FeatureStoreClient()
-
 
 # COMMAND ----------
 
@@ -95,6 +122,10 @@ y_predict = predictions_df.select("prediction").toPandas()
 # COMMAND ----------
 
 display(y_predict)
+
+# COMMAND ----------
+
+# MAGIC %md ##Classification Report
 
 # COMMAND ----------
 

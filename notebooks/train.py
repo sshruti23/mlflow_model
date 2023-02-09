@@ -1,4 +1,15 @@
 # Databricks notebook source
+# MAGIC %md #Training Model
+# MAGIC ###- Model uses random forest classifier for training
+# MAGIC ###- Read featurerized data , inference data and log model using fs.log_model
+# MAGIC ###- Write training set as delta table to be used by evaluate
+
+# COMMAND ----------
+
+# MAGIC %md ##Imports
+
+# COMMAND ----------
+
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import mlflow.sklearn
@@ -10,14 +21,20 @@ from sklearn.model_selection import train_test_split
 
 # COMMAND ----------
 
-def create_delta_table_for_df(table_name, df):
-    df.write.format("delta").mode("overwrite").saveAsTable(table_name)
+# MAGIC %md ##Delta Lake Functions
 
 # COMMAND ----------
 
+def create_delta_table_for_df(table_name, df):
+    df.write.format("delta").mode("overwrite").saveAsTable(table_name)
+    
 def read_inference_delta_table():
     inference_df = DeltaTable.forPath(spark, "dbfs:/inference_data_df")
     return inference_df.toDF()
+
+# COMMAND ----------
+
+# MAGIC %md ##Training Functions
 
 # COMMAND ----------
 
@@ -59,6 +76,9 @@ def train_model(X_train, X_test, y_train, y_test, training_set, fs):
 
 # COMMAND ----------
 
+# MAGIC %md ##Mlflow Client 
+
+# COMMAND ----------
 
 client = MlflowClient()
 
@@ -67,31 +87,23 @@ try:
 except:
     None
 
-# COMMAND ----------
-
+    
 # Disable MLflow autologging and instead log the model using Feature Store
 mlflow.sklearn.autolog(log_models=False)
+
+# COMMAND ----------
+
+# MAGIC %md ##Training Model
 
 # COMMAND ----------
 
 table_name= dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_table_name", default = "stockpred_dbebfee8", debugValue = 0)
 fs = feature_store.FeatureStoreClient()
 print(table_name)
-
-
-# COMMAND ----------
-
 X_train, X_test, y_train, y_test, training_set = load_data(table_name, "row_id")
-
-# COMMAND ----------
-
 train_model(X_train, X_test, y_train, y_test, training_set, fs)
 
 # COMMAND ----------
 
 display(training_set.load_df())
-
-# COMMAND ----------
-
 create_delta_table_for_df("default.training_set",training_set.load_df())
-
