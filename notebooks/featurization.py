@@ -1,9 +1,27 @@
 # Databricks notebook source
-# MAGIC %run ../src/data_preparation
+# MAGIC %md #Featurization Notebook
+# MAGIC ###Short Description:
+# MAGIC ###- read raw data stored with databricks file store system(dbfs)
+# MAGIC ###- preprocess raw data
+# MAGIC ###- creates features table
+# MAGIC ###- stores feature in databricks feature store
 
 # COMMAND ----------
 
+# MAGIC %md ##Imports
+
+# COMMAND ----------
+
+# MAGIC %md ###Supporting/helper notebooks
+
+# COMMAND ----------
+
+# MAGIC %run ../src/data_preparation
 # MAGIC %run ../src/feature_store
+
+# COMMAND ----------
+
+# MAGIC %md ###python libraries
 
 # COMMAND ----------
 
@@ -21,6 +39,53 @@ import mlflow.sklearn
 
 # COMMAND ----------
 
+# MAGIC %md ##Declaring constants
+
+# COMMAND ----------
+
+WINDOW_SIZE = 14
+
+# COMMAND ----------
+
+# MAGIC %md ##Prepare raw data for preprocessing
+
+# COMMAND ----------
+
+def read_raw_delta_table():
+    src_delta_table = DeltaTable.forPath(spark, "dbfs:/stockpred_delta_lake/")
+    return src_delta_table
+
+def add_primary_key(training_data, id_column_name):
+    """Add id column to dataframe"""
+    columns = training_data.columns
+    new_df = training_data.withColumn(id_column_name, monotonically_increasing_id())
+    return new_df[[id_column_name] + columns]
+
+def change_column_datatype(df):
+    output_df = (
+        df.withColumn("Close", df["Close"].cast(DoubleType()))
+        .withColumn("Open", df["Open"].cast(DoubleType()))
+        .withColumn("Date", df["Date"].cast(DateType()))
+        .withColumn("High", df["High"].cast(DoubleType()))
+        .withColumn("Low", df["Low"].cast(DoubleType()))
+        .withColumn("Adj_Close", df["Adj_Close"].cast(LongType()))
+        .withColumn("Volume", df["Volume"].cast(DoubleType()))
+    )
+    return output_df
+
+# COMMAND ----------
+
+training_data = read_raw_delta_table()  # source delta_table
+transformed_df = change_column_datatype(training_data.toDF())
+raw_df = prepare_training_data(transformed_df.toPandas())
+btc_mat = raw_df.to_numpy()
+display(btc_mat)
+
+# COMMAND ----------
+
+# MAGIC %md ##Transform raw df as per window duration defined
+
+# COMMAND ----------
 
 def rolling_window(a, window):
     """
@@ -39,67 +104,31 @@ def rolling_window(a, window):
 
 # COMMAND ----------
 
-
-def read_raw_delta_table():
-    src_delta_table = DeltaTable.forPath(spark, "dbfs:/stockpred_delta_lake/")
-    return src_delta_table
-
-
-# COMMAND ----------
-
-
-def change_column_datatype(df):
-    output_df = (
-        df.withColumn("Close", df["Close"].cast(DoubleType()))
-        .withColumn("Open", df["Open"].cast(DoubleType()))
-        .withColumn("Date", df["Date"].cast(DateType()))
-        .withColumn("High", df["High"].cast(DoubleType()))
-        .withColumn("Low", df["Low"].cast(DoubleType()))
-        .withColumn("Adj_Close", df["Adj_Close"].cast(LongType()))
-        .withColumn("Volume", df["Volume"].cast(DoubleType()))
-    )
-    return output_df
-
+X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
+Y = raw_df["to_predict"].to_numpy()[WINDOW_SIZE:]
+complete_df_with_label = prepare_data(X, Y)
+display(complete_df_with_label)
 
 # COMMAND ----------
 
-
-def add_primary_key(training_data, id_column_name):
-    """Add id column to dataframe"""
-    columns = training_data.columns
-    new_df = training_data.withColumn(id_column_name, monotonically_increasing_id())
-    return new_df[[id_column_name] + columns]
-
+# MAGIC %md ##Feature Store
 
 # COMMAND ----------
 
+# MAGIC %md ###Create df for feature store
+
+# COMMAND ----------
 
 def create_df_with_label(df):
     spark_df_with_label = spark.createDataFrame(df)
     df_with_primary_key = add_primary_key(spark_df_with_label, "row_id")
     return df_with_primary_key
-
-
-# COMMAND ----------
-
-training_data = read_raw_delta_table()  # source delta_table
-transformed_df = change_column_datatype(training_data.toDF())
-raw_df = prepare_training_data(transformed_df.toPandas())
-btc_mat = raw_df.to_numpy()
-WINDOW_SIZE = 14
-display(btc_mat)
-X = rolling_window(btc_mat[:, 7], WINDOW_SIZE)[:-1, :]
-Y = raw_df["to_predict"].to_numpy()[WINDOW_SIZE:]
-
-complete_df_with_label = prepare_data(X, Y)
-
-# COMMAND ----------
-
+  
 df_with_label = create_df_with_label(complete_df_with_label)
 
+
 # COMMAND ----------
 
-# creating feature df
 display(training_data.toDF())
 
 # COMMAND ----------
@@ -108,8 +137,16 @@ display(complete_df_with_label)
 
 # COMMAND ----------
 
-# Calls feature_store notebook
+# MAGIC %md ###Calling feature_store notebook to create feature table and store df in the feature store
+
+# COMMAND ----------
+
 create_feature_store(df_with_label.drop("to_predict"))
+
+# COMMAND ----------
+
+# MAGIC %md ###Create inference df , refernced by feature lookup to create training set df
+# MAGIC inference df is stored as delta for easy refernce by training block
 
 # COMMAND ----------
 

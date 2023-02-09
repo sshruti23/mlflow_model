@@ -1,6 +1,26 @@
 # Databricks notebook source
+# MAGIC %md #Raw Data Ingestion Notebook
+# MAGIC 
+# MAGIC ###Notebook Description :
+# MAGIC ###- Download yahoo finance data from web
+# MAGIC ###- Store df as delta table
+
+# COMMAND ----------
+
+# MAGIC %md #Import
+
+# COMMAND ----------
+
+# MAGIC %md ###Pypi Packages
+
+# COMMAND ----------
+
 # MAGIC %pip install pandas_datareader
 # MAGIC %pip install yfinance
+
+# COMMAND ----------
+
+# MAGIC %md ###Python Libraries
 
 # COMMAND ----------
 
@@ -12,6 +32,18 @@ import yfinance as yf
 
 # COMMAND ----------
 
+# MAGIC %md #Declare Constants
+
+# COMMAND ----------
+
+raw_ingestion_data_path="dbfs:/data/raw.csv"
+raw_delta_lake_path="dbfs:/stockpred_delta_lake/"
+
+# COMMAND ----------
+
+# MAGIC %md #Create Delta Lake
+
+# COMMAND ----------
 
 def download_yfinance_data():
     yf.pdr_override()
@@ -26,13 +58,11 @@ def download_yfinance_data():
 
 # COMMAND ----------
 
-
 def create_raw_delta_lake():
-    raw_df = spark.read.option("header", True).csv("dbfs:/data/raw.csv")
+    raw_df = spark.read.option("header", True).csv(raw_ingestion_data_path)
+    # columns needs to be renamed because delta table cannot store columns with special character
     transformed_df = raw_df.withColumnRenamed("Adj Close", "Adj_Close")
-    transformed_df.write.format("delta").mode("overwrite").save(
-        "dbfs:/stockpred_delta_lake/"
-    )
+    transformed_df.write.format("delta").mode("overwrite").save(raw_delta_lake_path)
 
 
 # COMMAND ----------
