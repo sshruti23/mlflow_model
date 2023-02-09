@@ -177,7 +177,7 @@
         "source": "GIT"
       }
     },{
-      "task_key": "Register",
+      "task_key": "Model_Promotion",
       "depends_on": [
         {
           "task_key": "Evaluate"
@@ -217,7 +217,7 @@
         }
       ],
       "notebook_task": {
-        "notebook_path": "notebooks/register",
+        "notebook_path": "notebooks/model_promotion",
         "source": "GIT"
       }
     }
