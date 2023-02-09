@@ -1,32 +1,13 @@
 # Databricks notebook source
 from databricks import feature_store
 from databricks.feature_store import feature_table, FeatureLookup
+import uuid
 
 # COMMAND ----------
 
 fs = feature_store.FeatureStoreClient()
 
 # COMMAND ----------
-
-
-def add_primary_key(training_data, id_column_name):
-    """Add id column to dataframe"""
-    columns = training_data.columns
-    new_df = training_data.withColumn(id_column_name, monotonically_increasing_id())
-    return new_df[[id_column_name] + columns]
-
-
-# COMMAND ----------
-
-
-def create_df_with_label():
-    spark_df_with_label = spark.createDataFrame(complete_df_with_label)
-    df_with_primary_key = add_primary_key(spark_df_with_label, "row_id")
-    return df_with_primary_key
-
-
-# COMMAND ----------
-
 
 def create_feature_store_database():
     spark.sql(f"CREATE DATABASE IF NOT EXISTS stockpred_db")
@@ -38,7 +19,6 @@ def create_feature_store_database():
 
 
 # COMMAND ----------
-
 
 def create_feature_store(feature_store_df):
     display(feature_store_df)

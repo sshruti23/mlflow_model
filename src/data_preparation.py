@@ -1,20 +1,14 @@
 # Databricks notebook source
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from delta.tables import *
-
 
 # COMMAND ----------
-
 
 def digitize(n):
     if n > 0:
         return 1
     return 0
 
-
 # COMMAND ----------
-
 
 def prepare_training_data(data):
     """
@@ -27,9 +21,7 @@ def prepare_training_data(data):
     data["to_predict"] = data["delta"].apply(lambda d: digitize(d))
     return data
 
-
 # COMMAND ----------
-
 
 def prepare_data(X, Y):
     X = pd.DataFrame(X)

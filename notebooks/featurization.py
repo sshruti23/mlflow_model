@@ -17,6 +17,9 @@
 # COMMAND ----------
 
 # MAGIC %run ../src/data_preparation
+
+# COMMAND ----------
+
 # MAGIC %run ../src/feature_store
 
 # COMMAND ----------
@@ -36,6 +39,7 @@ from mlflow.tracking.client import MlflowClient
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import mlflow.sklearn
+from delta.tables import *
 
 # COMMAND ----------
 
