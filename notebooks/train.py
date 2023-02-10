@@ -71,7 +71,7 @@ def train_model(X_train, X_test, y_train, y_test, training_set, fs):
                 artifact_path="binary_classification_stock_prediction",
                 flavor=mlflow.sklearn,
                 training_set=training_set,
-                registered_model_name="stockpred_model",
+#                 registered_model_name="stockpred_model",
             )
 
 # COMMAND ----------
