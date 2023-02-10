@@ -1,13 +1,31 @@
+# Databricks notebook source
+# MAGIC %md #Helper Notebook - Feature Store
+
+# COMMAND ----------
+
+# MAGIC %md ##Imports
+
+# COMMAND ----------
+
 from databricks import feature_store
 from databricks.feature_store import feature_table, FeatureLookup
 import uuid
-from databricks.sdk.runtime import *
+
+# COMMAND ----------
+
+# MAGIC %md ##Create Feature Store Client
+
+# COMMAND ----------
 
 fs = feature_store.FeatureStoreClient()
 
+# COMMAND ----------
+
+# MAGIC %md ##Create Feature store database and store df as feature table
+
+# COMMAND ----------
 
 def create_feature_store_database():
-    
     spark.sql(f"CREATE DATABASE IF NOT EXISTS stockpred_db")
 
     # Create a unique table name for each run. This prevents errors if you run the notebook multiple times.

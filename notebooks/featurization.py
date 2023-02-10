@@ -16,15 +16,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../src/data_preparation
-
-# COMMAND ----------
-
-# MAGIC %run ../src/feature_store
-
-# COMMAND ----------
-
 # MAGIC %md ###python libraries
+
+# COMMAND ----------
+
+from src.feature_store import create_feature_store_database,create_feature_store
+from src.data_preparation import prepare_data,prepare_training_data
+from databricks import feature_store
+from databricks.feature_store import feature_table, FeatureLookup
+import uuid
+from databricks.sdk.runtime import *
+import pyspark 
 
 # COMMAND ----------
 
