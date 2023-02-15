@@ -89,6 +89,7 @@ run_id = best_run_id
 filter_string = "run_id='{}'".format(run_id)
 print(filter_string)
 results = client.search_model_versions(filter_string)
+print(results)
 version=results[0].version
 print(version)
 
