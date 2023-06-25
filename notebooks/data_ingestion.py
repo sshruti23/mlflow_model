@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md #Raw Data Ingestion Notebook
-# MAGIC 
+# MAGIC
 # MAGIC ###Notebook Description :
 # MAGIC ###- Download yahoo finance data from web
 # MAGIC ###- Store df as delta table
@@ -38,6 +38,8 @@ import yfinance as yf
 
 raw_ingestion_data_path="dbfs:/data/raw.csv"
 raw_delta_lake_path="dbfs:/stockpred_delta_lake/"
+dbutils.fs.mkdirs("data/")
+dbutils.fs.mkdirs("stockpred_delta_lake/")
 
 # COMMAND ----------
 

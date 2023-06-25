@@ -10,10 +10,6 @@
 
 # COMMAND ----------
 
-# MAGIC %pip install databricks-feature-store
-
-# COMMAND ----------
-
 from sklearn.metrics import classification_report
 import pandas as pd
 from delta.tables import *
@@ -40,7 +36,7 @@ client = mlflow.MlflowClient()
 # COMMAND ----------
 
 def find_best_run(metric: str = "training_f1_score"):
-    experiment_runs = client.search_runs(experiment_ids=["1335986235541854"])
+    experiment_runs = client.search_runs(experiment_ids=["1502652873910379"])
     best_run_id = None
     best_artifact_uri = None
     best_metric_score = None
@@ -92,6 +88,8 @@ results = client.search_model_versions(filter_string)
 print(results)
 version=results[0].version
 print(version)
+registered_model_name=results[0].name
+print(registered_model_name)
 
 # COMMAND ----------
 
@@ -113,7 +111,7 @@ fs = feature_store.FeatureStoreClient()
 ## For simplicity, this example uses inference_data_df as input data for prediction
 batch_input_df = inference_data_df.drop("to_predict") # Drop the label column
 display(batch_input_df)
-predictions_df = fs.score_batch(f"models:/stockpred_model/{version}", batch_input_df)
+predictions_df = fs.score_batch(f"models:/{registered_model_name}/{version}", batch_input_df)
 display(predictions_df["row_id","prediction"])
 
 # COMMAND ----------
@@ -135,3 +133,4 @@ print(classification_report(y_test, y_predict))
 # COMMAND ----------
 
 dbutils.jobs.taskValues.set(key="best_model_version", value=version)
+dbutils.jobs.taskValues.set(key="registred_model_name", value=registered_model_name)

@@ -52,8 +52,8 @@ def load_data(table_name, lookup_key):
 
 def train_model(X_train, X_test, y_train, y_test, training_set, fs):
     ## fit and log model
-    n_estimators=[50, 100, 200, 500, 1000]
-    mlflow.set_experiment(experiment_id="1335986235541854")
+    n_estimators=[500]
+    mlflow.set_experiment(experiment_id="1502652873910379")
     for n_est in n_estimators:
         with mlflow.start_run(run_name=f"stock_estimator_{n_est}") as run:
             rf = RandomForestClassifier(bootstrap=True,
@@ -71,7 +71,7 @@ def train_model(X_train, X_test, y_train, y_test, training_set, fs):
                 artifact_path="binary_classification_stock_prediction",
                 flavor=mlflow.sklearn,
                 training_set=training_set,
-                registered_model_name="stockpred_model",
+                registered_model_name=f"stock_estimator_{n_est}",
             )
 
 # COMMAND ----------
@@ -97,7 +97,7 @@ mlflow.sklearn.autolog(log_models=False)
 
 # COMMAND ----------
 
-table_name= dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_table_name", default = "stockpred_dbebfee8", debugValue = 0)
+table_name= dbutils.jobs.taskValues.get(taskKey = "Featurization", key = "fs_table_name", default = "hive_metastore.stockpred_db.stockpred_dbd300e5", debugValue = "hive_metastore.stockpred_db.stockpred_dbd300e5")
 fs = feature_store.FeatureStoreClient()
 print(table_name)
 X_train, X_test, y_train, y_test, training_set = load_data(table_name, "row_id")
