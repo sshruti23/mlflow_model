@@ -16,11 +16,11 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../src/data_preparation
+# MAGIC %run ../utils/data_preparation
 
 # COMMAND ----------
 
-# MAGIC %run ../src/feature_store
+# MAGIC %run ../utils/feature_store
 
 # COMMAND ----------
 
@@ -58,6 +58,7 @@ WINDOW_SIZE = 14
 def read_raw_delta_table():
     src_delta_table = DeltaTable.forPath(spark, "dbfs:/stockpred_delta_lake/")
     return src_delta_table
+
 
 def add_primary_key(training_data, id_column_name):
     """Add id column to dataframe"""
