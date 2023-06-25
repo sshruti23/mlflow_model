@@ -106,4 +106,4 @@ train_model(X_train, X_test, y_train, y_test, training_set, fs)
 # COMMAND ----------
 
 display(training_set.load_df())
-create_delta_table_for_df("default.training_set",training_set.load_df())
+#create_delta_table_for_df("default.training_set",training_set.load_df())
